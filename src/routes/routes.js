@@ -1,11 +1,20 @@
 import Home from '@/components/home/Index';
+// Import user
 import UserCreate from '@/components/user/Create';
 import UserList from '@/components/user/List';
 import UserStart from '@/components/user/Start';
-
-import SupplierStart from '@/components/supplier/Start'
-import SupplierList from '@/components/supplier/List'
-import SupplierCreate from '@/components/supplier/Create'
+// Import supplier
+import SupplierStart from '@/components/supplier/Start';
+import SupplierList from '@/components/supplier/List';
+import SupplierCreate from '@/components/supplier/Create';
+// Import product
+import ProductStart from '@/components/product/Start';
+import ProductList from '@/components/product/List';
+import ProductCreate from '@/components/product/Create';
+// Import category
+import CategoryStart from '@/components/category/Start';
+import CategoryList from '@/components/category/List';
+import CategoryCreate from '@/components/category/Create';
 
 export const routes = [
   {
@@ -42,6 +51,38 @@ export const routes = [
         path: 'create',
         component: SupplierCreate,
         name: 'supplierCreate'
+      }
+    ]
+  },
+  {
+    path: '/products',
+    component: ProductStart,
+    children: [
+      {
+        path: 'list',
+        component: ProductList,
+        name: 'productList'
+      },
+      {
+        path: 'create',
+        component: ProductCreate,
+        name: 'productCreate'
+      }
+    ]
+  },
+  {
+    path: '/categories',
+    component: CategoryStart,
+    children: [
+      {
+        path: 'list',
+        component: CategoryList,
+        name: 'categoryList'
+      },
+      {
+        path: 'create',
+        component: CategoryCreate,
+        name: 'categoryCreate'
       }
     ]
   }

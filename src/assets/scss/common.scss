@@ -3,3 +3,40 @@
   font-weight: 500;
   font-size: 14px;
 }
+
+.account-tab {
+  li {
+    font-weight: 500;
+    cursor: pointer;
+    color: #9d9d9d;
+    padding: 10px 0;
+
+    &.active {
+      color: #887ef2;
+      border-bottom: 2px solid currentColor;
+    }
+  }
+
+  li + li {
+    margin-left: 20px;
+  }
+}
+
+.account {
+  &-picture {
+    flex: 0 0 100px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+  }
+
+  &-name {
+    margin-bottom: 10px;
+    color: #6e6e6e;
+  }
+
+  &-action {
+    margin-left: 20px;
+    flex: 1;
+  }
+}

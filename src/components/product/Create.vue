@@ -6,7 +6,7 @@
           <ul class="account-tab list-unstyled d-flex m-0">
             <li @click="tabToggle" :class="{ active: tabShow }">
               <i class="fas fa-user"></i>
-              <span class="ml-2">Account</span>
+              <span class="ml-2">Product</span>
             </li>
             <li @click="tabToggle" :class="{ active: !tabShow }">
               <i class="fas fa-info"></i>
@@ -36,25 +36,16 @@
               <form action="">
                 <div class="form-group row">
                   <div class="col-6">
-                    <label for="userName">Username</label>
+                    <label for="sku">SKU</label>
                     <input
-                      id="userName"
+                      id="sku"
                       class="form-control"
                       type="text"
-                      name="userName"
-                      placeholder="Username"
+                      name="sku"
+                      value="SKU"
+                      disabled
                     />
                   </div>
-                  <div class="col-6">
-                    <label for="status">Status</label>
-                    <select name="status" id="status" class="form-control">
-                      <option value="1">Active</option>
-                      <option value="2">Deactivated</option>
-                      <option value="3">Blocked</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group row">
                   <div class="col-6">
                     <label for="name">Name</label>
                     <input
@@ -65,25 +56,39 @@
                       placeholder="Name"
                     />
                   </div>
+                </div>
+                <div class="form-group row">
                   <div class="col-6">
-                    <label for="role">Role</label>
-                    <select name="role" id="role" class="form-control">
-                      <option value="1">Admin</option>
-                      <option value="2">User</option>
-                      <option value="3">Staff</option>
-                    </select>
+                    <label for="quantity">Quantity</label>
+                    <input
+                      id="quantity"
+                      class="form-control"
+                      type="number"
+                      name="quantity"
+                      value="0"
+                      min="0"
+                    />
+                  </div>
+                  <div class="col-6">
+                    <label for="price">Price</label>
+                    <input
+                      id="price"
+                      class="form-control"
+                      type="number"
+                      name="price"
+                      value="0"
+                      min="0"
+                    />
                   </div>
                 </div>
                 <div class="form-group row">
                   <div class="col-6">
-                    <label for="email">Email</label>
-                    <input
-                      id="email"
-                      class="form-control"
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                    />
+                    <label for="category">Category</label>
+                    <select name="category" id="category" class="form-control">
+                      <option value="1">Admin</option>
+                      <option value="2">User</option>
+                      <option value="3">Staff</option>
+                    </select>
                   </div>
                 </div>
               </form>
@@ -189,7 +194,7 @@
 
 <script>
 export default {
-  name: 'Create',
+  name: 'ProductCreate',
   data() {
     return {
       tabShow: true
@@ -205,5 +210,4 @@ export default {
 
 <style scoped lang="scss">
 @import '@/assets/scss/common';
-@import '../../assets/css/common.css';
 </style>
