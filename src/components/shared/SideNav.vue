@@ -131,22 +131,16 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/charts/chartjs.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>ChartJS</p>
-                </a>
+                <router-link :to="{ name: 'supplierList' }" class="nav-link">
+                  <i class="fas fa-list nav-icon"></i>
+                  <p>List</p>
+                </router-link>
               </li>
               <li class="nav-item">
-                <a href="pages/charts/flot.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Flot</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/charts/inline.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Inline</p>
-                </a>
+                <router-link :to="{ name: 'supplierCreate' }" class="nav-link">
+                  <i class="fas fa-pencil-alt nav-icon"></i>
+                  <p>Create new</p>
+                </router-link>
               </li>
             </ul>
           </li>
@@ -317,9 +311,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.nav-item.active {
-  .nav-treeview {
-    display: block;
-  }
+.nav-treeview {
+  margin-left: 25px;
 }
 </style>

@@ -153,7 +153,7 @@
 
 <script>
 export default {
-  name: 'List'
+  name: 'SupplierList'
 };
 </script>
 
