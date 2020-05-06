@@ -104,45 +104,18 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
+            <tr v-for="(user, index) in getAllUsers" :key="index">
+              <th scope="row">{{ index + 1 }}</th>
+              <td>
+                <span class="text-bold">{{ user.firstName }}</span>
+                <span class="ml-1">{{ user.lastName }}</span>
+              </td>
+              <td>{{ user.email }}</td>
             </tr>
           </tbody>
         </table>
@@ -152,8 +125,19 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
+
 export default {
-  name: 'List'
+  name: 'UserList',
+  computed: {
+    ...mapGetters(['getAllUsers'])
+  },
+  methods: {
+    ...mapActions(['fetchUsers'])
+  },
+  created() {
+    this.fetchUsers();
+  }
 };
 </script>
 

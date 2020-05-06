@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "start": "vue-cli-service serve",
-    "start:dev": "nodemon server.js",
+    "start:dev": "nodemon ./src/server/server.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
@@ -19,7 +20,8 @@
     "sass-loader": "^8.0.2",
     "slugify": "^1.4.0",
     "validator": "^13.0.0",
-    "vue": "^2.6.11"
+    "vue": "^2.6.11",
+    "vuex": "^3.3.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.3.0",
