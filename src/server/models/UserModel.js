@@ -12,13 +12,17 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please enter your last name'],
     trim: true
   },
+  role: {
+    type: String,
+    default: 'user'
+  },
   slug: String,
   email: {
     type: String,
     required: true,
     validate: [validator.isEmail, 'Please enter a correct email']
   },
-  isShow: {
+  isActive: {
     type: Boolean,
     default: true,
     select: false
@@ -35,14 +39,13 @@ const userSchema = new mongoose.Schema({
   },
   deletedAt: {
     type: Date,
-    default: Date.now(),
     select: false
   }
 });
 
 // Query middleware
 userSchema.pre(/^find!Update$/, function(next) {
-  this.find({ isShow: { $ne: false } });
+  this.find({ isActive: { $ne: false } });
   next();
 });
 

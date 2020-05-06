@@ -6,7 +6,7 @@
           <ul class="account-tab list-unstyled d-flex m-0">
             <li @click="tabToggle" :class="{ active: tabShow }">
               <i class="fas fa-user"></i>
-              <span class="ml-2">Account</span>
+              <span class="ml-2">Purchase</span>
             </li>
             <li @click="tabToggle" :class="{ active: !tabShow }">
               <i class="fas fa-info"></i>
@@ -36,26 +36,6 @@
               <form action="">
                 <div class="form-group row">
                   <div class="col-6">
-                    <label for="userName">Username</label>
-                    <input
-                      id="userName"
-                      class="form-control"
-                      type="text"
-                      name="userName"
-                      placeholder="Username"
-                    />
-                  </div>
-                  <div class="col-6">
-                    <label for="status">Status</label>
-                    <select name="status" id="status" class="form-control">
-                      <option value="1">Active</option>
-                      <option value="2">Deactivated</option>
-                      <option value="3">Blocked</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-6">
                     <label for="name">Name</label>
                     <input
                       id="name"
@@ -65,16 +45,6 @@
                       placeholder="Name"
                     />
                   </div>
-                  <div class="col-6">
-                    <label for="role">Role</label>
-                    <select name="role" id="role" class="form-control">
-                      <option value="1">Admin</option>
-                      <option value="2">User</option>
-                      <option value="3">Staff</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group row">
                   <div class="col-6">
                     <label for="email">Email</label>
                     <input
@@ -189,7 +159,7 @@
 
 <script>
 export default {
-  name: 'UserCreate',
+  name: 'PurchaseCreate',
   data() {
     return {
       tabShow: true
@@ -205,5 +175,4 @@ export default {
 
 <style scoped lang="scss">
 @import '@/assets/scss/common';
-@import '../../assets/css/common.css';
 </style>

@@ -106,6 +106,7 @@
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Email</th>
+              <th scope="col">Role</th>
             </tr>
           </thead>
           <tbody>
@@ -116,6 +117,7 @@
                 <span class="ml-1">{{ user.lastName }}</span>
               </td>
               <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
             </tr>
           </tbody>
         </table>

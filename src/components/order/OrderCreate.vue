@@ -6,11 +6,11 @@
           <ul class="account-tab list-unstyled d-flex m-0">
             <li @click="tabToggle" :class="{ active: tabShow }">
               <i class="fas fa-user"></i>
-              <span class="ml-2">Account</span>
+              <span class="ml-2">Order</span>
             </li>
             <li @click="tabToggle" :class="{ active: !tabShow }">
               <i class="fas fa-info"></i>
-              <span class="ml-2">Information</span>
+              <span class="ml-2">Shipping detail</span>
             </li>
           </ul>
         </div>
@@ -189,7 +189,7 @@
 
 <script>
 export default {
-  name: 'UserCreate',
+  name: 'OrderCreate',
   data() {
     return {
       tabShow: true
@@ -205,5 +205,4 @@ export default {
 
 <style scoped lang="scss">
 @import '@/assets/scss/common';
-@import '../../assets/css/common.css';
 </style>

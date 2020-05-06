@@ -153,7 +153,7 @@
 
 <script>
 export default {
-  name: 'CategoryList'
+  name: 'OrderList'
 };
 </script>
 

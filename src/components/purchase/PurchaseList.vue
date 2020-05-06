@@ -153,10 +153,8 @@
 
 <script>
 export default {
-  name: 'CategoryList'
+  name: 'PurchaseList'
 };
 </script>
 
-<style scoped lang="scss">
-@import '@/assets/scss/common';
-</style>
+<style scoped></style>

@@ -15,6 +15,14 @@ import ProductCreate from '@/components/product/Create';
 import CategoryStart from '@/components/category/Start';
 import CategoryList from '@/components/category/List';
 import CategoryCreate from '@/components/category/Create';
+// Import order
+import OrderStart from '@/components/order/OrderStart';
+import OrderList from '@/components/order/OrderList';
+import OrderCreate from '@/components/order/OrderCreate';
+// Import order
+import PurchaseStart from '@/components/purchase/PurchaseStart';
+import PurchaseList from '@/components/purchase/PurchaseList';
+import PurchaseCreate from '@/components/purchase/PurchaseCreate';
 
 export const routes = [
   {
@@ -83,6 +91,38 @@ export const routes = [
         path: 'create',
         component: CategoryCreate,
         name: 'categoryCreate'
+      }
+    ]
+  },
+  {
+    path: '/orders',
+    component: OrderStart,
+    children: [
+      {
+        path: 'list',
+        component: OrderList,
+        name: 'orderList'
+      },
+      {
+        path: 'create',
+        component: OrderCreate,
+        name: 'orderCreate'
+      }
+    ]
+  },
+  {
+    path: '/purchases',
+    component: PurchaseStart,
+    children: [
+      {
+        path: 'list',
+        component: PurchaseList,
+        name: 'purchaseList'
+      },
+      {
+        path: 'create',
+        component: PurchaseCreate,
+        name: 'purchaseCreate'
       }
     ]
   }

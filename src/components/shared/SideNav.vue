@@ -200,22 +200,16 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Simple Tables</p>
-                </a>
+                <router-link :to="{ name: 'purchaseList' }" class="nav-link">
+                  <i class="fas fa-list nav-icon"></i>
+                  <p>List</p>
+                </router-link>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>DataTables</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/jsgrid.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>jsGrid</p>
-                </a>
+                <router-link :to="{ name: 'purchaseCreate' }" class="nav-link">
+                  <i class="fas fa-pencil-alt nav-icon"></i>
+                  <p>Create</p>
+                </router-link>
               </li>
             </ul>
           </li>
@@ -229,22 +223,16 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/tables/simple.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Simple Tables</p>
-                </a>
+                <router-link :to="{ name: 'orderList' }" class="nav-link">
+                  <i class="fas fa-list nav-icon"></i>
+                  <p>List</p>
+                </router-link>
               </li>
               <li class="nav-item">
-                <a href="pages/tables/data.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>DataTables</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/tables/jsgrid.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>jsGrid</p>
-                </a>
+                <router-link :to="{ name: 'orderCreate' }" class="nav-link">
+                  <i class="fas fa-pencil-alt nav-icon"></i>
+                  <p>Create new</p>
+                </router-link>
               </li>
             </ul>
           </li>
