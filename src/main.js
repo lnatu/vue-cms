@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import App from './App.vue';
+import Vuelidate from 'vuelidate';
 
 import { routes } from './routes/routes';
 import { store } from './store/store';
@@ -8,6 +9,7 @@ import { store } from './store/store';
 Vue.config.productionTip = false;
 
 Vue.use(VueRouter);
+Vue.use(Vuelidate);
 
 const router = new VueRouter({
   routes,

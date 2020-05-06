@@ -36,14 +36,24 @@
               <form action="">
                 <div class="form-group row">
                   <div class="col-6">
-                    <label for="userName">Username</label>
+                    <label for="firstName">First name</label>
                     <input
-                      id="userName"
+                      v-model="user.firstName"
+                      @input="$v.user.firstName.$touch()"
+                      id="firstName"
                       class="form-control"
                       type="text"
-                      name="userName"
-                      placeholder="Username"
+                      name="firstName"
+                      placeholder="First name"
                     />
+                    <div v-if="$v.user.firstName.$error">
+                      <span
+                        v-if="!$v.user.firstName.required"
+                        class="text-danger"
+                      >
+                        First name is required
+                      </span>
+                    </div>
                   </div>
                   <div class="col-6">
                     <label for="status">Status</label>
@@ -56,21 +66,36 @@
                 </div>
                 <div class="form-group row">
                   <div class="col-6">
-                    <label for="name">Name</label>
+                    <label for="lastName">Last name</label>
                     <input
-                      id="name"
+                      v-model="user.lastName"
+                      @input="$v.user.lastName.$touch()"
+                      id="lastName"
                       class="form-control"
                       type="text"
-                      name="name"
-                      placeholder="Name"
+                      name="lastName"
+                      placeholder="Last name"
                     />
+                    <div v-if="$v.user.lastName.$error">
+                      <span
+                        v-if="!$v.user.lastName.required"
+                        class="text-danger"
+                      >
+                        Last name is required
+                      </span>
+                    </div>
                   </div>
                   <div class="col-6">
                     <label for="role">Role</label>
-                    <select name="role" id="role" class="form-control">
-                      <option value="1">Admin</option>
-                      <option value="2">User</option>
-                      <option value="3">Staff</option>
+                    <select
+                      v-model="user.role"
+                      name="role"
+                      id="role"
+                      class="form-control"
+                    >
+                      <option value="admin" selected>Admin</option>
+                      <option value="user">User</option>
+                      <option value="staff">Staff</option>
                     </select>
                   </div>
                 </div>
@@ -78,19 +103,37 @@
                   <div class="col-6">
                     <label for="email">Email</label>
                     <input
+                      v-model="user.email"
+                      @input="$v.user.email.$touch()"
                       id="email"
                       class="form-control"
                       type="email"
                       name="email"
                       placeholder="Email"
                     />
+                    <div v-if="$v.user.email.$error">
+                      <span v-if="!$v.user.email.required" class="text-danger">
+                        Email is required
+                      </span>
+                      <span v-if="!$v.user.email.email" class="text-danger">
+                        Email is not valid
+                      </span>
+                    </div>
                   </div>
                 </div>
               </form>
             </div>
             <div class="save-changes float-right">
-              <button class="btn btn-primary">Save changes</button>
-              <button class="btn btn-outline-danger ml-2">Reset</button>
+              <button
+                class="btn btn-primary"
+                @click="createUser(user)"
+                :disabled="isFormValid"
+              >
+                Save changes
+              </button>
+              <button class="btn btn-outline-danger ml-2" @click="resetInput">
+                Reset
+              </button>
             </div>
           </div>
 
@@ -177,7 +220,9 @@
               </form>
             </div>
             <div class="save-changes float-right">
-              <button class="btn btn-primary">Save changes</button>
+              <button class="btn btn-primary">
+                Save changes
+              </button>
               <button class="btn btn-outline-danger ml-2">Reset</button>
             </div>
           </div>
@@ -188,22 +233,63 @@
 </template>
 
 <script>
+import { required, email } from 'vuelidate/lib/validators';
+import { mapActions } from 'vuex';
 export default {
   name: 'UserCreate',
+  computed: {
+    isFormValid() {
+      return this.$v.user.$invalid;
+    }
+  },
   data() {
     return {
+      user: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        role: 'user',
+        isActive: true
+      },
       tabShow: true
     };
   },
+  validations: {
+    user: {
+      firstName: {
+        required
+      },
+      lastName: {
+        required
+      },
+      email: {
+        required,
+        email
+      },
+      role: {
+        required
+      }
+    }
+  },
   methods: {
+    ...mapActions(['createUser']),
+    resetInput() {
+      Object.keys(this.user).forEach(key => {
+        if (key !== 'isActive') {
+          this.user[key] = '';
+        }
+      });
+    },
     tabToggle() {
       this.tabShow = !this.tabShow;
     }
+  },
+  created() {
+    console.log(this.$v.user.$invalid);
   }
 };
 </script>
 
 <style scoped lang="scss">
 @import '@/assets/scss/common';
-@import '../../assets/css/common.css';
 </style>

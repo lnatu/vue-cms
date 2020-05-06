@@ -49,7 +49,6 @@
               <li class="nav-item">
                 <router-link
                   :to="{ name: 'userList' }"
-                  href="pages/tables/simple.html"
                   class="nav-link"
                 >
                   <i class="fas fa-list nav-icon"></i>
@@ -59,7 +58,6 @@
               <li class="nav-item">
                 <router-link
                   :to="{ name: 'userCreate' }"
-                  href="pages/tables/data.html"
                   class="nav-link"
                 >
                   <i class="fas fa-pencil-alt nav-icon"></i>
