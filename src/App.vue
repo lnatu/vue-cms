@@ -1,5 +1,6 @@
 <template>
   <div class="wrapper">
+    <Loading v-if="getShowLoading" />
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
       <!-- Left navbar links -->
@@ -216,10 +217,17 @@
 <script>
 import SideNav from './components/shared/SideNav';
 import Footer from './components/shared/Footer';
+import Loading from './components/shared/Loading';
+import { mapGetters } from 'vuex';
+
 export default {
   components: {
     SideNav,
-    Footer
+    Footer,
+    Loading
+  },
+  computed: {
+    ...mapGetters(['getShowLoading'])
   },
   data() {
     return {

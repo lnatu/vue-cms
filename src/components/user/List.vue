@@ -107,17 +107,28 @@
               <th scope="col">Name</th>
               <th scope="col">Email</th>
               <th scope="col">Role</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(user, index) in getAllUsers" :key="index">
+            <tr v-if="getAllUsers.length === 0">
+              <td colspan="5" class="text-bold">No data</td>
+            </tr>
+            <tr v-else v-for="(user, index) in getAllUsers" :key="index">
               <th scope="row">{{ index + 1 }}</th>
               <td>
                 <span class="text-bold">{{ user.firstName }}</span>
                 <span class="ml-1">{{ user.lastName }}</span>
               </td>
-              <td>{{ user.email }}</td>
+              <td class="text-primary">{{ user.email }}</td>
               <td>{{ user.role }}</td>
+              <td>
+                <router-link
+                        :to="{ name: 'userDetail', params: { id: user._id } }"
+                >
+                  <i class="fas fa-eye"></i>
+                </router-link>
+              </td>
             </tr>
           </tbody>
         </table>

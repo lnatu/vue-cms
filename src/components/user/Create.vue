@@ -23,7 +23,12 @@
                 alt=""
               />
               <div class="account-action">
-                <h3 class="account-name">That Name Huh</h3>
+                <h3 class="account-name">
+                  <span class="font-weight-bold mr-2">{{
+                    user.firstName
+                  }}</span>
+                  <span class="font-weight-normal">{{ user.lastName }}</span>
+                </h3>
                 <div class="action">
                   <button class="btn btn-success">Change avatar</button>
                   <button class="btn btn-outline-danger ml-3">
@@ -126,7 +131,7 @@
             <div class="save-changes float-right">
               <button
                 class="btn btn-primary"
-                @click="createUser(user)"
+                @click="createUserAction"
                 :disabled="isFormValid"
               >
                 Save changes
@@ -234,7 +239,7 @@
 
 <script>
 import { required, email } from 'vuelidate/lib/validators';
-import { mapActions } from 'vuex';
+import { mapMutations, mapActions } from 'vuex';
 export default {
   name: 'UserCreate',
   computed: {
@@ -272,6 +277,7 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setShowLoading']),
     ...mapActions(['createUser']),
     resetInput() {
       Object.keys(this.user).forEach(key => {
@@ -280,12 +286,16 @@ export default {
         }
       });
     },
+    createUserAction() {
+      this.setShowLoading(true);
+      this.createUser(this.user).then(id => {
+        this.setShowLoading(false);
+        this.$router.push({ name: 'userDetail', params: { id } });
+      });
+    },
     tabToggle() {
       this.tabShow = !this.tabShow;
     }
-  },
-  created() {
-    console.log(this.$v.user.$invalid);
   }
 };
 </script>

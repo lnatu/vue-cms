@@ -2,6 +2,7 @@ import Home from '@/components/home/Index';
 // Import user
 import UserCreate from '@/components/user/Create';
 import UserList from '@/components/user/List';
+import UserDetail from '@/components/user/UserDetail';
 import UserStart from '@/components/user/Start';
 // Import supplier
 import SupplierStart from '@/components/supplier/Start';
@@ -31,13 +32,18 @@ export const routes = [
     name: 'home'
   },
   {
-    path: '/user',
+    path: '/users',
     component: UserStart,
     children: [
       {
         path: 'list',
         component: UserList,
         name: 'userList'
+      },
+      {
+        path: ':id',
+        component: UserDetail,
+        name: 'userDetail'
       },
       {
         path: 'create',
