@@ -54,6 +54,14 @@ const actions = {
         return res.data.data.user._id;
       })
       .catch(err => console.log(err));
+  },
+  deleteUser({ commit }, payload) {
+    return axios
+      .delete(`/api/v1/users/${payload}`, { data: { isActive: false } })
+      .then(res => {
+        return true;
+      })
+      .catch(err => console.log(err));
   }
 };
 

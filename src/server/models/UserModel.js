@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
 });
 
 // Query middleware
-userSchema.pre(/^find!Update$/, function(next) {
+userSchema.pre(/^find.*(?<!Update)$/, function(next) {
   this.find({ isActive: { $ne: false } });
   next();
 });

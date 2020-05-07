@@ -124,7 +124,7 @@
               <td>{{ user.role }}</td>
               <td>
                 <router-link
-                        :to="{ name: 'userDetail', params: { id: user._id } }"
+                  :to="{ name: 'userDetail', params: { id: user._id } }"
                 >
                   <i class="fas fa-eye"></i>
                 </router-link>

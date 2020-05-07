@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <div class="card">
+      <div v-if="getUser" class="card">
         <div class="card-header">
           <h3 class="mb-0">Account</h3>
         </div>
@@ -19,7 +19,10 @@
                     <i class="fas fa-pencil-alt"></i>
                     Edit
                   </button>
-                  <button class="btn btn-outline-danger">
+                  <button
+                    class="btn btn-outline-danger"
+                    @click="deleteUserAction"
+                  >
                     <i class="fas fa-trash-alt"></i>
                     Delete
                   </button>
@@ -49,12 +52,17 @@
           </div>
         </div>
       </div>
+      <div v-else class="card">
+        <div class="card-header">
+          <h3 class="mb-0">User not found</h3>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'UserDetail',
@@ -67,7 +75,13 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['fetchUser'])
+    ...mapMutations(['setShowLoading']),
+    ...mapActions(['fetchUser', 'deleteUser']),
+    deleteUserAction() {
+      this.deleteUser(this.userId).then(data => {
+        this.$router.go(0);
+      });
+    }
   },
   created() {
     this.fetchUser(this.userId);
