@@ -1,103 +1,82 @@
 const APIFeatures = require('./../utils/apiFeatures');
+const AppError = require('./../utils/AppError');
+const catchError = require('./../utils/catchError');
 const UserModel = require('./../models/UserModel');
 
-exports.getAllUsers = async (req, res) => {
-  try {
-    const features = new APIFeatures(UserModel.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
+exports.getAllUsers = catchError(async (req, res) => {
+  const features = new APIFeatures(UserModel.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
 
-    const users = await features.query;
+  const users = await features.query;
 
-    res.status(200).json({
-      status: 'success',
-      results: users.length,
-      data: {
-        users
-      }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
+  res.status(200).json({
+    status: 'success',
+    results: users.length,
+    data: {
+      users
+    }
+  });
+});
+
+exports.getUser = catchError(async (req, res, next) => {
+  const user = await UserModel.findById(req.params.id);
+
+  if (!user) {
+    return next(new AppError(`No user found with id: ${req.params.id}`, 404));
   }
-};
 
-exports.getUser = async (req, res) => {
-  try {
-    const user = await UserModel.findById(req.params.id);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
+});
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user
-      }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
+exports.createUser = catchError(async (req, res, next) => {
+  const user = await UserModel.create(req.body);
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
+});
+
+exports.updateUser = catchError(async (req, res, next) => {
+  const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  if (!user) {
+    return next(new AppError(`No user found with id: ${req.params.id}`, 404));
   }
-};
 
-exports.createUser = async (req, res) => {
-  try {
-    const user = await UserModel.create(req.body);
+  res.status(200).json({
+    status: 'success',
+    data: {
+      user
+    }
+  });
+});
 
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user
-      }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
+exports.deleteUser = catchError(async (req, res, next) => {
+  const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true
+  });
+
+  if (!user) {
+    return next(new AppError(`No user found with id: ${req.params.id}`, 404));
   }
-};
 
-exports.updateUser = async (req, res) => {
-  try {
-    const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        user
-      }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
-
-exports.deleteUser = async (req, res) => {
-  try {
-    await UserModel.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
-
-    res.status(204).json({
-      status: 'success',
-      data: null
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});

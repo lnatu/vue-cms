@@ -45,7 +45,10 @@ const actions = {
         commit('setUser', user);
         commit('setShowLoading', false);
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        commit('setShowLoading', false);
+        console.log(err);
+      });
   },
   createUser({ commit }, payload) {
     return axios

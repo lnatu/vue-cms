@@ -5,6 +5,8 @@
   "scripts": {
     "start": "vue-cli-service serve",
     "start:dev": "nodemon ./src/server/server.js",
+    "start:prod": "set NODE_ENV=production && nodemon ./src/server/server.js",
+    "debug": "ndb ./src/server/server.js",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
