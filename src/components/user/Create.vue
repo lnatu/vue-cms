@@ -105,7 +105,7 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <div class="col-6">
+                  <div class="col-12">
                     <label for="email">Email</label>
                     <input
                       v-model="user.email"
@@ -122,6 +122,48 @@
                       </span>
                       <span v-if="!$v.user.email.email" class="text-danger">
                         Email is not valid
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-6">
+                    <label for="password">Password</label>
+                    <input
+                      v-model="user.password"
+                      @input="$v.user.password.$touch()"
+                      id="password"
+                      class="form-control"
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                    />
+                    <div v-if="$v.user.password.$error">
+                      <span v-if="!$v.user.password.required" class="text-danger">
+                        Password is required
+                      </span>
+                      <span v-if="!$v.user.password.minLength" class="text-danger">
+                        Password must be 8 characters long
+                      </span>
+                    </div>
+                  </div>
+                  <div class="col-6">
+                    <label for="passwordConfirm">Password confirm</label>
+                    <input
+                      v-model="user.passwordConfirm"
+                      @input="$v.user.passwordConfirm.$touch()"
+                      id="passwordConfirm"
+                      class="form-control"
+                      type="password"
+                      name="passwordConfirm"
+                      placeholder="Password confirm"
+                    />
+                    <div v-if="$v.user.passwordConfirm.$error">
+                      <span v-if="!$v.user.passwordConfirm.required" class="text-danger">
+                        Confirm your password
+                      </span>
+                      <span v-if="!$v.user.password.sameAs" class="text-danger">
+                        Password doesn't match
                       </span>
                     </div>
                   </div>
@@ -238,7 +280,7 @@
 </template>
 
 <script>
-import { required, email } from 'vuelidate/lib/validators';
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators';
 import { mapMutations, mapActions } from 'vuex';
 export default {
   name: 'UserCreate',
@@ -253,6 +295,8 @@ export default {
         firstName: '',
         lastName: '',
         email: '',
+        password: '',
+        passwordConfirm: '',
         role: 'user',
         isActive: true
       },
@@ -270,6 +314,14 @@ export default {
       email: {
         required,
         email
+      },
+      password: {
+        required,
+        minLength: minLength(8)
+      },
+      passwordConfirm: {
+        required,
+        sameAsPassword: sameAs('password')
       },
       role: {
         required

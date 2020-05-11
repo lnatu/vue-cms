@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 const state = {
-  users: null,
+  users: [],
   user: null
 };
 
@@ -52,7 +52,7 @@ const actions = {
   },
   createUser({ commit }, payload) {
     return axios
-      .post('/api/v1/users', payload)
+      .post('/api/v1/users/signup', payload)
       .then(res => {
         return res.data.data.user._id;
       })
