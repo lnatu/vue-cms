@@ -47,19 +47,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link
-                  :to="{ name: 'userList' }"
-                  class="nav-link"
-                >
+                <router-link :to="{ name: 'userList' }" class="nav-link">
                   <i class="fas fa-list nav-icon"></i>
                   <p>List</p>
                 </router-link>
               </li>
               <li class="nav-item">
-                <router-link
-                  :to="{ name: 'userCreate' }"
-                  class="nav-link"
-                >
+                <router-link :to="{ name: 'userCreate' }" class="nav-link">
                   <i class="fas fa-pencil-alt nav-icon"></i>
                   <p>Create new</p>
                 </router-link>
@@ -76,46 +70,16 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="pages/layout/top-nav.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Top Navigation</p>
-                </a>
+                <router-link :to="{ name: 'groupList' }" class="nav-link">
+                  <i class="fas fa-list nav-icon"></i>
+                  <p>List</p>
+                </router-link>
               </li>
               <li class="nav-item">
-                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Top Navigation + Sidebar</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/boxed.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Boxed</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/fixed-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Fixed Sidebar</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/fixed-topnav.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Fixed Navbar</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/fixed-footer.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Fixed Footer</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="pages/layout/collapsed-sidebar.html" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Collapsed Sidebar</p>
-                </a>
+                <router-link :to="{ name: 'groupCreate' }" class="nav-link">
+                  <i class="fas fa-pencil-alt nav-icon"></i>
+                  <p>Create new</p>
+                </router-link>
               </li>
             </ul>
           </li>

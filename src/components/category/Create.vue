@@ -145,7 +145,7 @@
 
 <script>
 export default {
-  name: 'Create',
+  name: 'CategoryCreate',
   data() {
     return {
       tabShow: true

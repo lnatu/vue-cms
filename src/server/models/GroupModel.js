@@ -5,7 +5,7 @@ const groupSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please enter group name']
   },
-  role: {
+  roles: {
     type: [Object],
     validate: {
       validator: function(array) {

@@ -20,10 +20,14 @@ import CategoryCreate from '@/components/category/Create';
 import OrderStart from '@/components/order/OrderStart';
 import OrderList from '@/components/order/OrderList';
 import OrderCreate from '@/components/order/OrderCreate';
-// Import order
+// Import purchase
 import PurchaseStart from '@/components/purchase/PurchaseStart';
 import PurchaseList from '@/components/purchase/PurchaseList';
 import PurchaseCreate from '@/components/purchase/PurchaseCreate';
+// Import group
+import GroupStart from '@/components/group/GroupStart';
+import GroupList from '@/components/group/GroupList';
+import GroupCreate from '@/components/group/GroupCreate';
 
 export const routes = [
   {
@@ -129,6 +133,22 @@ export const routes = [
         path: 'create',
         component: PurchaseCreate,
         name: 'purchaseCreate'
+      }
+    ]
+  },
+  {
+    path: '/groups',
+    component: GroupStart,
+    children: [
+      {
+        path: 'list',
+        component: GroupList,
+        name: 'groupList'
+      },
+      {
+        path: 'create',
+        component: GroupCreate,
+        name: 'groupCreate'
       }
     ]
   }

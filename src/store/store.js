@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import common from './modules/common';
+import groups from './modules/groups';
 import users from './modules/users';
 
 Vue.use(Vuex);
@@ -22,6 +23,7 @@ export const store = new Vuex.Store({
   },
   modules: {
     common,
+    groups,
     users
   }
 });
