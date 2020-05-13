@@ -104,45 +104,28 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Group name</th>
+              <th scope="col">Group roles</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
+            <tr v-if="getAllGroups.length <= 0">
+              <td colspan="3">No data</td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
+            <tr v-else v-for="(group, index) in getAllGroups" :key="index">
+              <th scope="row">{{ index + 1 }}</th>
+              <td>{{ group.name }}</td>
+              <td>
+                <span v-for="(role, roleIndex) in group.roles" :key="roleIndex">
+                  {{ role.name }}
+                </span>
+              </td>
+              <td>
+                <router-link to="/">
+                  <i class="fas fa-eye"></i>
+                </router-link>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -152,8 +135,19 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
-  name: 'GroupList'
+  name: 'GroupList',
+  computed: {
+    ...mapGetters(['getAllGroups'])
+  },
+  methods: {
+    ...mapActions(['fetchAllGroups'])
+  },
+  created() {
+    this.fetchAllGroups();
+  }
 };
 </script>
 

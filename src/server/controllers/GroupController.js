@@ -1,9 +1,16 @@
+const APIFeatures = require('./../utils/apiFeatures');
 const AppError = require('./../utils/AppError');
 const catchError = require('./../utils/catchError');
 const GroupModel = require('./../models/GroupModel');
 
 exports.getAllGroup = catchError(async (req, res, next) => {
-  const groups = await GroupModel.find();
+  const features = new APIFeatures(GroupModel.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const groups = await features.query;
 
   res.status(200).json({
     status: 'success',

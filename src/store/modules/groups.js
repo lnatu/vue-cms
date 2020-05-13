@@ -24,9 +24,20 @@ const mutations = {
 };
 
 const actions = {
+  fetchAllGroups({ commit }) {
+    commit('setShowLoading', true);
+    axios
+      .get('/api/v1/groups')
+      .then(res => {
+        const groups = res.data.data.groups;
+        commit('setAllGroups', groups);
+        commit('setShowLoading', false);
+      })
+      .catch(err => console.log(err));
+  },
   createGroup({ commit }, payload) {
     commit('setShowLoading', true);
-    return axios
+    axios
       .post('/api/v1/groups', payload)
       .then(res => {
         commit('setShowLoading', false);
