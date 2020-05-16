@@ -35,14 +35,15 @@ const actions = {
       })
       .catch(err => console.log(err));
   },
-  createGroup({ commit }, payload) {
+  async createGroup({ commit }, payload) {
     commit('setShowLoading', true);
-    axios
-      .post('/api/v1/groups', payload)
-      .then(res => {
-        commit('setShowLoading', false);
-      })
-      .catch(err => console.log(err));
+    try {
+      await axios.post('/api/v1/groups', payload);
+      commit('setShowLoading', false);
+    } catch (err) {
+      console.log(err);
+      commit('setShowLoading', false);
+    }
   }
 };
 

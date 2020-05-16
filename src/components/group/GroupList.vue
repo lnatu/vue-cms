@@ -111,7 +111,7 @@
           </thead>
           <tbody>
             <tr v-if="getAllGroups.length <= 0">
-              <td colspan="3">No data</td>
+              <td colspan="4">No data</td>
             </tr>
             <tr v-else v-for="(group, index) in getAllGroups" :key="index">
               <th scope="row">{{ index + 1 }}</th>
