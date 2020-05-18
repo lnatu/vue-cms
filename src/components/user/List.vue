@@ -9,85 +9,18 @@
           <div class="row">
             <div class="col-3">
               <p class="mb-0 text-filter">Role</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="roleFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="roleFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Admin</a>
-                  <a class="dropdown-item" href="#">User</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Status</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="statusFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="statusFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Active</a>
-                  <a class="dropdown-item" href="#">Deactivated</a>
-                  <a class="dropdown-item" href="#">Blocked</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Verified</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="verifyFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="verifyFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Yes</a>
-                  <a class="dropdown-item" href="#">No</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Department</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="departmentFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="departmentFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Sales</a>
-                  <a class="dropdown-item" href="#">Development</a>
-                  <a class="dropdown-item" href="#">Management</a>
-                </div>
-              </div>
+              <select
+                v-model="filter.role"
+                @change="filterRole"
+                class="form-control border-dark"
+              >
+                <option value="all">All</option>
+                <option value="admin">Admin</option>
+                <option value="manger">Manager</option>
+                <option value="staff">Staff</option>
+                <option value="user">User</option>
+                <option value="customer">Customer</option>
+              </select>
             </div>
           </div>
         </div>
@@ -132,24 +65,80 @@
             </tr>
           </tbody>
         </table>
+        <nav v-if="pages > 0" aria-label="Page navigation example">
+          <ul class="pagination mt-5">
+            <li class="page-item">
+              <a class="page-link" href="#">Previous</a>
+            </li>
+            <router-link
+              v-for="page in pages"
+              :key="page"
+              :to="{
+                name: 'userList',
+                query: { page, limit: $route.query.limit }
+              }"
+              active-class="active"
+              exact
+              tag="li"
+              class="page-item"
+            >
+              <a class="page-link">{{ page }}</a>
+            </router-link>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapMutations, mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'UserList',
+  data() {
+    return {
+      pages: 0,
+      filter: {
+        role: 'all'
+      }
+    };
+  },
   computed: {
     ...mapGetters(['getAllUsers'])
   },
   methods: {
-    ...mapActions(['fetchUsers'])
+    ...mapMutations(['setAllUsers', 'setShowLoading']),
+    ...mapActions(['fetchUsers']),
+    showData() {
+      const query = this.$route.query;
+      let queryString = '';
+      for (let item in query) {
+        queryString += `${item}=${query[item]}&`;
+      }
+      queryString = queryString.substring(0, queryString.length - 1);
+      const _this = this;
+      this.fetchUsers(queryString).then(res => {
+        this.setAllUsers(res.data.users)
+        if (res.results > 0) {
+          _this.pages = Math.ceil(res.pages / parseInt(query.limit));
+        }
+        this.setShowLoading(false);
+      });
+    },
+    filterRole() {
+      let query = { ...this.$route.query, role: this.filter.role };
+      this.$router.push({ name: 'userList', query });
+    }
   },
   created() {
-    this.fetchUsers();
+    this.showData();
+  },
+  watch: {
+    $route() {
+      this.showData();
+    }
   }
 };
 </script>

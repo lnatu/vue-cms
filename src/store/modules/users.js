@@ -24,17 +24,20 @@ const mutations = {
 };
 
 const actions = {
-  fetchUsers({ commit }) {
+  async fetchUsers({ commit }, payload) {
     // Do stuff
+    payload ? (payload = `?${payload}`) : '';
     commit('setShowLoading', true);
-    axios
-      .get('/api/v1/users')
+    /*axios
+      .get(`/api/v1/users${payload}`)
       .then(res => {
         const users = res.data.data.users;
         commit('setAllUsers', users);
         commit('setShowLoading', false);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err));*/
+    const res = await axios.get(`/api/v1/users${payload}`);
+    return res.data;
   },
   fetchUser({ commit }, payload) {
     commit('setShowLoading', true);
