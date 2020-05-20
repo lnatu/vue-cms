@@ -9,6 +9,34 @@ const signToken = id =>
     expiresIn: process.env.JWT_EXPIRES_IN
   });
 
+const createSendToken = (user, statusCode, res) => {
+  const env = process.env.NODE_ENV.trim();
+  const token = signToken(user._id);
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: true
+  };
+
+  if (env === 'production') {
+    cookieOptions.secure = true;
+  }
+
+  res.cookie('jwt', token, cookieOptions);
+
+  user.password = undefined;
+
+  res.status(statusCode).json({
+    status: 'success',
+    token,
+    data: {
+      user
+    }
+  });
+};
+
 exports.signup = catchError(async (req, res, next) => {
   const input = req.body;
 
@@ -23,15 +51,7 @@ exports.signup = catchError(async (req, res, next) => {
     isActive: input.isActive
   });
 
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: 'success',
-    token,
-    data: {
-      user
-    }
-  });
+  createSendToken(user, 201, res);
 });
 
 exports.login = catchError(async (req, res, next) => {
@@ -47,12 +67,7 @@ exports.login = catchError(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
 
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: 'success',
-    token
-  });
+  createSendToken(user, 201, res);
 });
 
 exports.protect = catchError(async (req, res, next) => {

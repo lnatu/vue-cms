@@ -24,8 +24,16 @@ const productSchema = new mongoose.Schema({
   },
   manufactureDetails: Object,
   shippingDetail: Object,
-  category: Object,
-  supplier: Object,
+  category: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Category',
+    required: [true, 'Product must has a category']
+  },
+  supplier: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Supplier',
+    required: [true, 'Product must has a supplier']
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -40,6 +48,14 @@ const productSchema = new mongoose.Schema({
     type: Date,
     select: false
   }
+});
+
+productSchema.pre(/^find/, function(next) {
+  this.populate({ path: 'supplier', select: '-__v' }).populate({
+    path: 'category',
+    select: '-__v'
+  });
+  next();
 });
 
 const ProductModel = mongoose.model('Product', productSchema);

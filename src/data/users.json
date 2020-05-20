@@ -1,170 +1,182 @@
 [
   {
-    "firstName": "User 1",
-    "lastName": "Hoo",
-    "email": "user1@gmail.com",
+    "firstName": "Amanda Ava",
+    "lastName": "Koci",
+    "email": "avamax@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 2",
-    "lastName": "Hoo",
-    "email": "user2@gmail.com",
+    "firstName": "Ariana",
+    "lastName": "Grande",
+    "email": "arianagrande@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 3",
-    "lastName": "Hoo",
-    "email": "user3@gmail.com",
+    "firstName": "Katy",
+    "lastName": "Perry",
+    "email": "katyperry@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 4",
-    "lastName": "Hoo",
-    "email": "user4@gmail.com",
+    "firstName": "Zayn",
+    "lastName": "Malik",
+    "email": "zaynmalik@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 5",
-    "lastName": "Hoo",
-    "email": "user5@gmail.com",
+    "firstName": "Magga",
+    "lastName": "Bracco",
+    "email": "maggabracco@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 6",
-    "lastName": "Hoo",
-    "email": "user6@gmail.com",
+    "firstName": "Alana",
+    "lastName": "Mystyna",
+    "email": "alanamystyna@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 7",
-    "lastName": "Hoo",
-    "email": "user7@gmail.com",
+    "firstName": "Alan",
+    "lastName": "Walker",
+    "email": "alanwalker@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 8",
-    "lastName": "Hoo",
-    "email": "user8@gmail.com",
+    "firstName": "Allie",
+    "lastName": "X",
+    "email": "alliex@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 9",
-    "lastName": "Hoo",
-    "email": "user9@gmail.com",
+    "firstName": "Ed",
+    "lastName": "Sheeran",
+    "email": "edsheeran@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 10",
-    "lastName": "Hoo",
-    "email": "user10@gmail.com",
+    "firstName": "Tony",
+    "lastName": "Stark",
+    "email": "ironman@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 11",
-    "lastName": "Hoo",
-    "email": "user11@gmail.com",
+    "firstName": "Peter",
+    "lastName": "Parker",
+    "email": "spiderman@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 12",
-    "lastName": "Hoo",
-    "email": "user12@gmail.com",
+    "firstName": "Thor",
+    "lastName": "Odinson",
+    "email": "thor@gmail.com",
     "password": "asdasdasd",
     "passwordConfirm": "asdasdasd"
   },
   {
-    "firstName": "User 13",
-    "lastName": "Hoo",
-    "email": "user13@gmail.com",
+    "firstName": "Jean",
+    "lastName": "Grey",
+    "email": "jeangrey@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "customer"
   },
   {
-    "firstName": "User 14",
-    "lastName": "Hoo",
-    "email": "user14@gmail.com",
+    "firstName": "Tim",
+    "lastName": "Kay",
+    "email": "timkey@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "admin"
   },
   {
-    "firstName": "User 15",
-    "lastName": "Hoo",
-    "email": "user15@gmail.com",
+    "firstName": "Dash",
+    "lastName": "Fastin",
+    "email": "dashfastin@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "customer"
   },
   {
-    "firstName": "User 16",
-    "lastName": "Hoo",
-    "email": "user16@gmail.com",
+    "firstName": "Zoom",
+    "lastName": "Zeen Zam",
+    "email": "zeenzam@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "customer"
   },
   {
-    "firstName": "User 17",
-    "lastName": "Hoo",
+    "firstName": "Shazam",
+    "lastName": "Sunday",
     "email": "user17@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "admin"
   },
   {
-    "firstName": "User 18",
-    "lastName": "Hoo",
-    "email": "user18@gmail.com",
+    "firstName": "Scarlet",
+    "lastName": "Witch",
+    "email": "wanda@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "admin"
   },
   {
-    "firstName": "User 19",
-    "lastName": "Hoo",
-    "email": "user19@gmail.com",
+    "firstName": "Strange",
+    "lastName": "Dr",
+    "email": "drstrange@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "admin"
   },
   {
-    "firstName": "User 20",
-    "lastName": "Hoo",
-    "email": "user20@gmail.com",
+    "firstName": "Drax",
+    "lastName": "The Invisible Man",
+    "email": "drax@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "customer"
   },
   {
-    "firstName": "User 21",
-    "lastName": "Hoo",
-    "email": "user21@gmail.com",
+    "firstName": "Ryan",
+    "lastName": "Tender",
+    "email": "ryantender@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "staff"
   },
   {
-    "firstName": "User 22",
-    "lastName": "Hoo",
-    "email": "user22@gmail.com",
+    "firstName": "Kimberly",
+    "lastName": "House",
+    "email": "kimmyhouse@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "staff"
   },
   {
-    "firstName": "User 23",
-    "lastName": "Hoo",
-    "email": "user23@gmail.com",
+    "firstName": "Boo",
+    "lastName": "Johnson",
+    "email": "boojohnson@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "staff"
   },
   {
-    "firstName": "User 24",
-    "lastName": "Hoo",
-    "email": "user24@gmail.com",
+    "firstName": "Hosh",
+    "lastName": "Wedena",
+    "email": "hoshwedena@gmail.com",
     "password": "asdasdasd",
-    "passwordConfirm": "asdasdasd"
+    "passwordConfirm": "asdasdasd",
+    "role": "staff"
   }
 ]

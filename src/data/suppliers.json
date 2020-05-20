@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Zayn Corp",
+    "email": "zayncorp@gmail.com",
+    "phone": "+1-808-5559-835"
+  },
+  {
+    "name": "Fashion H&M",
+    "email": "fhandm@gmail.com",
+    "phone": "+1-808-5554-216"
+  },
+  {
+    "name": "ASOS Fashion",
+    "email": "asos@hello.io",
+    "phone": "+1-808-5551-688"
+  },
+  {
+    "name": "Zim and Tim",
+    "email": "zimtim@gmail.com",
+    "phone": "+1-808-5559-608"
+  },
+  {
+    "name": "511 Pro",
+    "email": "pro511@gmail.com",
+    "phone": "+1-808-5556-950"
+  },
+  {
+    "name": "Thynx fitness",
+    "email": "thynxfitness@gmail.com",
+    "phone": "+1-808-5557-971"
+  },
+  {
+    "name": "Brago Braca",
+    "email": "braca@gmail.com",
+    "phone": "+1-808-5552-951"
+  }
+]

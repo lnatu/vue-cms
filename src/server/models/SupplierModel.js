@@ -9,6 +9,7 @@ const supplierSchema = new mongoose.Schema({
   email: {
     type: String,
     required: [true, 'Please enter supplier email'],
+    unique: [true, 'Email has already taken'],
     validate: [validator.isEmail, 'Please enter a correct email']
   },
   phone: {
