@@ -104,45 +104,40 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
+              <th scope="col">SKU</th>
+              <th scope="col">Name</th>
+              <th scope="col">quantity</th>
+              <th scope="col">Price</th>
+              <th scope="col">Category</th>
+              <th scope="col">Supplier</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
+            <tr v-for="(product, index) in getAllProducts" :key="product._id">
+              <th scope="row">{{ index + 1 }}</th>
+              <td>{{ product.sku }}</td>
+              <td>{{ product.name }}</td>
+              <td>{{ product.quantity }}</td>
+              <td>{{ product.price }}</td>
+              <td>{{ product.category.name }}</td>
+              <td>
+                <router-link
+                  :to="{
+                    name: 'supplierDetail',
+                    params: { id: product.supplier._id }
+                  }"
+                >
+                  {{ product.supplier.name }}
+                </router-link>
+              </td>
+              <td>
+                <router-link
+                  :to="{ name: 'productDetail', params: { id: product._id } }"
+                >
+                  <i class="fas fa-eye"></i>
+                </router-link>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -152,8 +147,19 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
-  name: 'ProductList'
+  name: 'ProductList',
+  computed: {
+    ...mapGetters(['getAllProducts'])
+  },
+  methods: {
+    ...mapActions(['fetchAllProducts'])
+  },
+  created() {
+    this.fetchAllProducts();
+  }
 };
 </script>
 

@@ -8,10 +8,12 @@ import UserStart from '@/components/user/Start';
 import SupplierStart from '@/components/supplier/Start';
 import SupplierList from '@/components/supplier/List';
 import SupplierCreate from '@/components/supplier/Create';
+import SupplierDetail from '@/components/supplier/SupplierDetail';
 // Import product
 import ProductStart from '@/components/product/Start';
 import ProductList from '@/components/product/List';
 import ProductCreate from '@/components/product/Create';
+import ProductDetail from '@/components/product/ProductDetail';
 // Import category
 import CategoryStart from '@/components/category/Start';
 import CategoryList from '@/components/category/List';
@@ -66,6 +68,11 @@ export const routes = [
         name: 'supplierList'
       },
       {
+        path: ':id',
+        component: SupplierDetail,
+        name: 'supplierDetail'
+      },
+      {
         path: 'create',
         component: SupplierCreate,
         name: 'supplierCreate'
@@ -85,6 +92,11 @@ export const routes = [
         path: 'create',
         component: ProductCreate,
         name: 'productCreate'
+      },
+      {
+        path: ':id',
+        component: ProductDetail,
+        name: 'productDetail'
       }
     ]
   },

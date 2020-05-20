@@ -38,17 +38,18 @@
                   <div class="col-6">
                     <label for="sku">SKU</label>
                     <input
+                      v-model="product.sku"
                       id="sku"
                       class="form-control"
                       type="text"
                       name="sku"
-                      value="SKU"
                       disabled
                     />
                   </div>
                   <div class="col-6">
                     <label for="name">Name</label>
                     <input
+                      v-model="product.name"
                       id="name"
                       class="form-control"
                       type="text"
@@ -61,22 +62,22 @@
                   <div class="col-6">
                     <label for="quantity">Quantity</label>
                     <input
+                      v-model="product.quantity"
                       id="quantity"
                       class="form-control"
                       type="number"
                       name="quantity"
-                      value="0"
                       min="0"
                     />
                   </div>
                   <div class="col-6">
                     <label for="price">Price</label>
                     <input
+                      v-model="product.price"
                       id="price"
                       class="form-control"
                       type="number"
                       name="price"
-                      value="0"
                       min="0"
                     />
                   </div>
@@ -84,17 +85,56 @@
                 <div class="form-group row">
                   <div class="col-6">
                     <label for="category">Category</label>
-                    <select name="category" id="category" class="form-control">
-                      <option value="1">Admin</option>
-                      <option value="2">User</option>
-                      <option value="3">Staff</option>
+                    <select
+                      v-model="product.category"
+                      name="category"
+                      id="category"
+                      class="form-control"
+                    >
+                      <option
+                        v-for="category in getAllCategories"
+                        :key="category._id"
+                        :value="category._id"
+                        >{{ category.name.toUpperCase() }}
+                      </option>
                     </select>
+                  </div>
+                  <div class="col-6">
+                    <label for="supplier">Supplier</label>
+                    <select
+                      v-model="product.supplier"
+                      name="supplier"
+                      id="supplier"
+                      class="form-control"
+                    >
+                      <option
+                        v-for="supplier in getAllSuppliers"
+                        :key="supplier._id"
+                        :value="supplier._id"
+                        >{{ supplier.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-12">
+                    <label for="description">Description</label>
+                    <textarea
+                      v-model="product.description"
+                      class="no-resize form-control"
+                      name="description"
+                      id="description"
+                      rows="10"
+                      placeholder="Description..."
+                    />
                   </div>
                 </div>
               </form>
             </div>
             <div class="save-changes float-right">
-              <button class="btn btn-primary">Save changes</button>
+              <button @click="createProduct(product)" class="btn btn-primary">
+                Save changes
+              </button>
               <button class="btn btn-outline-danger ml-2">Reset</button>
             </div>
           </div>
@@ -193,17 +233,61 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   name: 'ProductCreate',
+  computed: {
+    ...mapGetters(['getAllCategories', 'getAllSuppliers'])
+  },
   data() {
     return {
-      tabShow: true
+      tabShow: true,
+      product: {
+        sku: '',
+        name: '',
+        description: '',
+        quantity: 0,
+        price: 0,
+        category: '',
+        supplier: ''
+      }
     };
   },
   methods: {
+    ...mapMutations(['setShowLoading', 'setAllCategories', 'setAllSuppliers']),
+    ...mapActions(['fetchAllCategories', 'fetchAllSuppliers', 'createProduct']),
     tabToggle() {
       this.tabShow = !this.tabShow;
+    },
+    generateId() {
+      return (
+        'SKU-' +
+        Math.random()
+          .toString(36)
+          .substr(2, 9)
+          .toUpperCase()
+      );
     }
+  },
+  created() {
+    this.product.sku = this.generateId();
+    this.setShowLoading(true);
+    Promise.all([this.fetchAllCategories(), this.fetchAllSuppliers()])
+      .then(res => {
+        const categories = res[0].data.data.categories;
+        const suppliers = res[1].data.data.suppliers;
+
+        this.setAllCategories(categories);
+        this.setAllSuppliers(suppliers);
+
+        this.product.category = categories[0]._id;
+        this.product.supplier = suppliers[0]._id;
+
+        this.setShowLoading(false);
+      })
+      .catch(error => {
+        console.error(error.response);
+      });
   }
 };
 </script>
