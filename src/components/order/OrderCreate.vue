@@ -48,10 +48,19 @@
                   </div>
                   <div class="col-6">
                     <label for="status">Customer</label>
-                    <select name="status" id="status" class="form-control">
-                      <option value="1">Active</option>
-                      <option value="2">Deactivated</option>
-                      <option value="3">Blocked</option>
+                    <select
+                      v-model="order.customer"
+                      name="status"
+                      id="status"
+                      class="form-control"
+                    >
+                      <option
+                        v-for="customer in getAllCustomers"
+                        :key="customer._id"
+                        :value="customer._id"
+                      >
+                        {{ `${customer.firstName} ${customer.lastName}` }}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -59,6 +68,7 @@
                   <div class="col-6">
                     <label for="name">Ship date</label>
                     <input
+                      v-model="order.shipDate"
                       id="name"
                       class="form-control"
                       type="text"
@@ -68,11 +78,12 @@
                   </div>
                 </div>
                 <div class="form-group row">
-                  <div v-if="Object.keys(orderDetail).length > 0" class="col-12">
+                  <div
+                    v-if="Object.keys(orderDetail).length > 0"
+                    class="col-12"
+                  >
                     <h3 class="text-danger mt-3">Ordered item</h3>
-                    <ul
-                      class="list-group mb-3"
-                    >
+                    <ul class="list-group mb-3">
                       <li
                         v-for="(order, index) in orderDetail"
                         :key="index"
@@ -156,7 +167,7 @@
             <div class="save-changes float-right">
               <button
                 type="button"
-                @click.prevent="removeDuplicate"
+                @click.prevent="createOrderDetailAction"
                 class="btn btn-primary"
               >
                 Save changes
@@ -259,21 +270,34 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
+
 export default {
   name: 'OrderCreate',
   computed: {
-    ...mapGetters(['getAllProducts'])
+    ...mapGetters(['getAllProducts', 'getAllCustomers'])
   },
   data() {
     return {
       tabShow: true,
       orderDetail: {},
-      total: 0
+      total: 0,
+      order: {
+        createdBy: '5ec4e6eda2698f3ecc6965f8',
+        customer: '',
+        orderDetail: [],
+        shipDate: ''
+      }
     };
   },
   methods: {
-    ...mapActions(['fetchAllProducts']),
+    ...mapMutations(['setShowLoading', 'setCustomers']),
+    ...mapActions([
+      'createOrderDetail',
+      'createOrder',
+      'fetchAllProducts',
+      'fetchCustomers'
+    ]),
     addOrderDetail(productId, productName, productPrice, quantity) {
       if (this.orderDetail[productId]) {
         this.orderDetail[productId].quantity += 1;
@@ -295,11 +319,42 @@ export default {
           this.orderDetail[order].quantity;
       }
     },
+    async showCustomers() {
+      const response = await this.fetchCustomers();
+      const customers = response.data.data.users;
+      this.order.customer = customers[0]._id;
+      this.setCustomers(customers);
+    },
+    async createOrderDetailAction() {
+      this.setShowLoading(true);
+      let orderDetailItem = [];
+      for (let order in this.orderDetail) {
+        const { productId, quantity } = this.orderDetail[order];
+        orderDetailItem.push(
+          this.createOrderDetail({ product: productId, quantity })
+        );
+      }
+
+      Promise.all(orderDetailItem)
+        .then(res => {
+          res.forEach(item => {
+            this.order.orderDetail.push(item.data.data.orderDetail._id);
+          });
+
+          return true;
+        })
+        .then(async res => {
+          const response = await this.createOrder(this.order);
+          const orderId = response.data.data.order._id;
+          this.$router.push({ name: 'orderDetail', params: { id: orderId } });
+        });
+    },
     tabToggle() {
       this.tabShow = !this.tabShow;
     }
   },
   created() {
+    this.showCustomers();
     this.fetchAllProducts();
   }
 };

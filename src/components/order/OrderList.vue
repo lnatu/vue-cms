@@ -116,7 +116,7 @@
           </thead>
           <tbody>
             <tr v-if="getAllOrders.length === 0">
-              <td colspan="7">No data</td>
+              <td colspan="9">No data</td>
             </tr>
             <tr v-else v-for="(order, index) in getAllOrders" :key="order.id">
               <th scope="row">{{ index + 1 }}</th>

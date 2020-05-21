@@ -37,7 +37,12 @@ exports.getOrder = catchError(async (req, res, next) => {
 });
 
 exports.createOrder = catchError(async (req, res, next) => {
-  const order = await OrderModel.create(req.body);
+  let order = await OrderModel.create(req.body);
+
+  order = await OrderModel.findById(order._id).populate({
+    path: 'orderDetail',
+    select: '-__v'
+  });
 
   res.status(201).json({
     status: 'success',

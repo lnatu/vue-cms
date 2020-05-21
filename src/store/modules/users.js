@@ -2,12 +2,16 @@ const axios = require('axios');
 
 const state = {
   users: [],
+  customers: [],
   user: null
 };
 
 const getters = {
   getAllUsers(state) {
     return state.users;
+  },
+  getAllCustomers(state) {
+    return state.customers;
   },
   getUser(state) {
     return state.user;
@@ -18,6 +22,9 @@ const mutations = {
   setAllUsers(state, payload) {
     state.users = payload;
   },
+  setCustomers(state, payload) {
+    state.customers = payload;
+  },
   setUser(state, payload) {
     state.user = payload;
   }
@@ -26,9 +33,22 @@ const mutations = {
 const actions = {
   async fetchUsers({ commit }, payload) {
     // Do stuff
-    commit('setShowLoading', true);
-    const res = await axios.get(`/api/v1/users`, { params: payload });
-    return res.data;
+    try {
+      commit('setShowLoading', true);
+      const res = await axios.get(`/api/v1/users`, { params: payload });
+      return res.data;
+    } catch (err) {
+      console.log(err.response);
+      commit('setShowLoading', false);
+    }
+  },
+  async fetchCustomers({ commit }) {
+    try {
+      return await axios.get('/api/v1/users?role=customer');
+    } catch (err) {
+      console.log(err.response);
+      commit('setShowLoading', false);
+    }
   },
   fetchUser({ commit }, payload) {
     commit('setShowLoading', true);

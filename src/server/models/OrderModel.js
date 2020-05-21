@@ -56,6 +56,7 @@ const orderSchema = new mongoose.Schema(
 orderSchema.virtual('totalPrice').get(function() {
   let total = 0;
   this.orderDetail.forEach(order => {
+    console.log(order);
     total += order.product.price * order.quantity;
   });
 
@@ -66,13 +67,15 @@ orderSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'orderDetail',
     select: '-__v'
-  }).populate({
-    path: 'customer',
-    select: '-__v'
-  }).populate({
-    path: 'createdBy',
-    select: '-__v'
-  });
+  })
+    .populate({
+      path: 'customer',
+      select: '-__v'
+    })
+    .populate({
+      path: 'createdBy',
+      select: '-__v'
+    });
   next();
 });
 

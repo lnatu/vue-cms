@@ -8,6 +8,7 @@ import products from './modules/products';
 import users from './modules/users';
 import suppliers from './modules/suppliers';
 import orders from './modules/orders';
+import ordersDetail from './modules/ordersDetail';
 
 Vue.use(Vuex);
 
@@ -19,6 +20,7 @@ export const store = new Vuex.Store({
     users,
     suppliers,
     products,
-    orders
+    orders,
+    ordersDetail
   }
 });

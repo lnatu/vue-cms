@@ -29,7 +29,6 @@ const actions = {
     try {
       const response = await axios.get('/api/v1/orders');
       const orders = response.data.data.orders;
-      console.log(orders);
       commit('setAllOrders', orders);
       commit('setShowLoading', false);
     } catch (err) {
@@ -37,7 +36,7 @@ const actions = {
       commit('setShowLoading', false);
     }
   },
-  async fetchOrder({commit}, payload) {
+  async fetchOrder({ commit }, payload) {
     commit('setShowLoading', true);
     try {
       const response = await axios.get(`/api/v1/orders/${payload}`);
@@ -45,6 +44,15 @@ const actions = {
       commit('setOrder', order);
       commit('setShowLoading', false);
     } catch (err) {
+      console.log(err.response);
+      commit('setShowLoading', false);
+    }
+  },
+  async createOrder({ commit }, payload) {
+    try {
+      return await axios.post('/api/v1/orders/', payload);
+    } catch (err) {
+      console.log(err);
       console.log(err.response);
       commit('setShowLoading', false);
     }
