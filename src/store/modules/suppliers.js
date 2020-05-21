@@ -30,6 +30,26 @@ const actions = {
     } catch (err) {
       console.log(err.response);
     }
+  },
+  async fetchSupplier({ commit }, payload) {
+    commit('setShowLoading', true);
+    try {
+      const response = await axios.get(`/api/v1/suppliers/${payload}`);
+      const supplier = response.data.data.supplier;
+      commit('setSupplier', supplier);
+      commit('setShowLoading', false);
+    } catch (err) {
+      console.log(err.response);
+      commit('setShowLoading', false);
+    }
+  },
+  async createSupplier({ commit }, payload) {
+    try {
+      const response = await axios.post('/api/v1/suppliers', payload);
+      return response.data.data.supplier._id;
+    } catch (err) {
+      console.log(err.response);
+    }
   }
 };
 

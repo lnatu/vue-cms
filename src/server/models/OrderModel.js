@@ -35,8 +35,7 @@ const orderSchema = new mongoose.Schema(
     },
     createdAt: {
       type: Date,
-      default: Date.now(),
-      select: false
+      default: Date.now()
     },
     updatedAt: {
       type: Date,
@@ -69,6 +68,9 @@ orderSchema.pre(/^find/, function(next) {
     select: '-__v'
   }).populate({
     path: 'customer',
+    select: '-__v'
+  }).populate({
+    path: 'createdBy',
     select: '-__v'
   });
   next();

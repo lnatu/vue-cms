@@ -35,11 +35,23 @@ const actions = {
       console.log(err.response);
     }
   },
+  async fetchProduct({ commit }, payload) {
+    commit('setShowLoading', true);
+    try {
+      const response = await axios.get(`/api/v1/products/${payload}`);
+      const product = response.data.data.product;
+      commit('setProduct', product);
+      commit('setShowLoading', false);
+    } catch (err) {
+      console.log(err.response);
+      commit('setShowLoading', false);
+    }
+  },
   async createProduct({ commit }, payload) {
     commit('setShowLoading', true);
     try {
-      await axios.post('/api/v1/products', payload);
-      commit('setShowLoading', false);
+      const response = await axios.post('/api/v1/products', payload);
+      return response.data.data.product._id;
     } catch (err) {
       console.log(err.response);
     }

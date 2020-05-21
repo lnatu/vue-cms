@@ -22,6 +22,7 @@ import CategoryCreate from '@/components/category/Create';
 import OrderStart from '@/components/order/OrderStart';
 import OrderList from '@/components/order/OrderList';
 import OrderCreate from '@/components/order/OrderCreate';
+import OrderDetail from '@/components/order/OrderDetail';
 // Import purchase
 import PurchaseStart from '@/components/purchase/PurchaseStart';
 import PurchaseList from '@/components/purchase/PurchaseList';
@@ -68,14 +69,14 @@ export const routes = [
         name: 'supplierList'
       },
       {
-        path: ':id',
-        component: SupplierDetail,
-        name: 'supplierDetail'
-      },
-      {
         path: 'create',
         component: SupplierCreate,
         name: 'supplierCreate'
+      },
+      {
+        path: ':id',
+        component: SupplierDetail,
+        name: 'supplierDetail'
       }
     ]
   },
@@ -129,6 +130,11 @@ export const routes = [
         path: 'create',
         component: OrderCreate,
         name: 'orderCreate'
+      },
+      {
+        path: ':id',
+        component: OrderDetail,
+        name: 'orderDetail'
       }
     ]
   },

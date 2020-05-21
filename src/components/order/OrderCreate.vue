@@ -36,17 +36,18 @@
               <form action="">
                 <div class="form-group row">
                   <div class="col-6">
-                    <label for="userName">Username</label>
+                    <label for="userName">Creator</label>
                     <input
                       id="userName"
                       class="form-control"
                       type="text"
                       name="userName"
-                      placeholder="Username"
+                      value="Test"
+                      disabled
                     />
                   </div>
                   <div class="col-6">
-                    <label for="status">Status</label>
+                    <label for="status">Customer</label>
                     <select name="status" id="status" class="form-control">
                       <option value="1">Active</option>
                       <option value="2">Deactivated</option>
@@ -56,7 +57,7 @@
                 </div>
                 <div class="form-group row">
                   <div class="col-6">
-                    <label for="name">Name</label>
+                    <label for="name">Ship date</label>
                     <input
                       id="name"
                       class="form-control"
@@ -65,31 +66,101 @@
                       placeholder="Name"
                     />
                   </div>
-                  <div class="col-6">
-                    <label for="role">Role</label>
-                    <select name="role" id="role" class="form-control">
-                      <option value="1">Admin</option>
-                      <option value="2">User</option>
-                      <option value="3">Staff</option>
-                    </select>
-                  </div>
                 </div>
                 <div class="form-group row">
-                  <div class="col-6">
-                    <label for="email">Email</label>
-                    <input
-                      id="email"
-                      class="form-control"
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                    />
+                  <div v-if="Object.keys(orderDetail).length > 0" class="col-12">
+                    <h3 class="text-danger mt-3">Ordered item</h3>
+                    <ul
+                      class="list-group mb-3"
+                    >
+                      <li
+                        v-for="(order, index) in orderDetail"
+                        :key="index"
+                        class="list-group-item"
+                      >
+                        <span class="text-bold" style="font-size: 22px;">
+                          {{ order.productName }}
+                        </span>
+                        <span class="ml-2 mr-2">x</span>
+                        <span>{{ order.quantity }}</span>
+                        <span class="ml-2 mr-2">x</span>
+                        <span class="text-success text-bold"
+                          >$ {{ order.productPrice }}</span
+                        >
+                      </li>
+                    </ul>
+                    <h3 v-if="total > 0" class="mb-4 float-right">
+                      <strong>Total:</strong>
+                      <span class="ml-1 text-success">$ {{ total }}</span>
+                    </h3>
+                  </div>
+                  <div class="col-12">
+                    <h4>All products</h4>
+                    <table class="table table-bordered table-hover mb-0">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">SKU</th>
+                          <th scope="col">Name</th>
+                          <th scope="col">In stock</th>
+                          <th scope="col">Price</th>
+                          <th scope="col">Category</th>
+                          <th scope="col">Supplier</th>
+                          <th scope="col">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr
+                          v-for="(product, index) in getAllProducts"
+                          :key="product._id"
+                        >
+                          <th scope="row">{{ index + 1 }}</th>
+                          <td>{{ product.sku }}</td>
+                          <td>{{ product.name }}</td>
+                          <td>{{ product.quantity }}</td>
+                          <td>{{ product.price }}</td>
+                          <td>{{ product.category.name }}</td>
+                          <td>
+                            <router-link
+                              :to="{
+                                name: 'supplierDetail',
+                                params: { id: product.supplier._id }
+                              }"
+                            >
+                              {{ product.supplier.name }}
+                            </router-link>
+                          </td>
+                          <td>
+                            <button
+                              type="button"
+                              @click.prevent="
+                                addOrderDetail(
+                                  product._id,
+                                  product.name,
+                                  product.price,
+                                  1
+                                )
+                              "
+                              class="btn btn-success"
+                            >
+                              <i class="fas fa-plus"></i>
+                            </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </div>
                 </div>
               </form>
             </div>
             <div class="save-changes float-right">
-              <button class="btn btn-primary">Save changes</button>
+              <button
+                type="button"
+                @click.prevent="removeDuplicate"
+                class="btn btn-primary"
+              >
+                Save changes
+              </button>
               <button class="btn btn-outline-danger ml-2">Reset</button>
             </div>
           </div>
@@ -188,17 +259,48 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'OrderCreate',
+  computed: {
+    ...mapGetters(['getAllProducts'])
+  },
   data() {
     return {
-      tabShow: true
+      tabShow: true,
+      orderDetail: {},
+      total: 0
     };
   },
   methods: {
+    ...mapActions(['fetchAllProducts']),
+    addOrderDetail(productId, productName, productPrice, quantity) {
+      if (this.orderDetail[productId]) {
+        this.orderDetail[productId].quantity += 1;
+      } else {
+        this.$set(this.orderDetail, productId, {
+          productId,
+          productName,
+          productPrice,
+          quantity
+        });
+      }
+      this.calcTotal();
+    },
+    calcTotal() {
+      this.total = 0;
+      for (let order in this.orderDetail) {
+        this.total +=
+          this.orderDetail[order].productPrice *
+          this.orderDetail[order].quantity;
+      }
+    },
     tabToggle() {
       this.tabShow = !this.tabShow;
     }
+  },
+  created() {
+    this.fetchAllProducts();
   }
 };
 </script>

@@ -26,17 +26,8 @@ const mutations = {
 const actions = {
   async fetchUsers({ commit }, payload) {
     // Do stuff
-    payload ? (payload = `?${payload}`) : '';
     commit('setShowLoading', true);
-    /*axios
-      .get(`/api/v1/users${payload}`)
-      .then(res => {
-        const users = res.data.data.users;
-        commit('setAllUsers', users);
-        commit('setShowLoading', false);
-      })
-      .catch(err => console.log(err));*/
-    const res = await axios.get(`/api/v1/users${payload}`);
+    const res = await axios.get(`/api/v1/users`, { params: payload });
     return res.data;
   },
   fetchUser({ commit }, payload) {

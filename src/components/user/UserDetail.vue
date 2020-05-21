@@ -54,7 +54,7 @@
       </div>
       <div v-else class="card">
         <div class="card-header">
-          <h3 class="mb-0">User not found</h3>
+          <h3 class="mb-0">User not found 😥</h3>
         </div>
       </div>
     </div>

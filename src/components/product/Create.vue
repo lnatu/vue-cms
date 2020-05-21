@@ -39,23 +39,38 @@
                     <label for="sku">SKU</label>
                     <input
                       v-model="product.sku"
+                      @input="$v.product.sku.$touch()"
                       id="sku"
                       class="form-control"
                       type="text"
                       name="sku"
                       disabled
                     />
+                    <div v-if="$v.product.sku.$error">
+                      <span v-if="!$v.product.sku.required" class="text-danger">
+                        SKU is required
+                      </span>
+                    </div>
                   </div>
                   <div class="col-6">
                     <label for="name">Name</label>
                     <input
                       v-model="product.name"
+                      @input="$v.product.name.$touch()"
                       id="name"
                       class="form-control"
                       type="text"
                       name="name"
                       placeholder="Name"
                     />
+                    <div v-if="$v.product.name.$error">
+                      <span
+                        v-if="!$v.product.name.required"
+                        class="text-danger"
+                      >
+                        Product name is required
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -63,23 +78,51 @@
                     <label for="quantity">Quantity</label>
                     <input
                       v-model="product.quantity"
+                      @input="$v.product.quantity.$touch()"
                       id="quantity"
                       class="form-control"
                       type="number"
                       name="quantity"
                       min="0"
                     />
+                    <div v-if="$v.product.quantity.$error">
+                      <span
+                        v-if="!$v.product.quantity.required"
+                        class="text-danger"
+                      >
+                        Product quantity is required
+                      </span>
+                      <span
+                        v-if="!$v.product.quantity.minValue"
+                        class="text-danger"
+                        >Product quantity must be greater than 0
+                      </span>
+                    </div>
                   </div>
                   <div class="col-6">
                     <label for="price">Price</label>
                     <input
                       v-model="product.price"
+                      @input="$v.product.price.$touch()"
                       id="price"
                       class="form-control"
                       type="number"
                       name="price"
                       min="0"
                     />
+                    <div v-if="$v.product.price.$error">
+                      <span
+                        v-if="!$v.product.price.required"
+                        class="text-danger"
+                      >
+                        Product Price is required
+                      </span>
+                      <span
+                        v-if="!$v.product.price.minValue"
+                        class="text-danger"
+                        >Product quantity must be greater than 0
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -87,6 +130,7 @@
                     <label for="category">Category</label>
                     <select
                       v-model="product.category"
+                      @input="$v.product.category.$touch()"
                       name="category"
                       id="category"
                       class="form-control"
@@ -98,11 +142,20 @@
                         >{{ category.name.toUpperCase() }}
                       </option>
                     </select>
+                    <div v-if="$v.product.category.$error">
+                      <span
+                        v-if="!$v.product.category.required"
+                        class="text-danger"
+                      >
+                        Product category is required
+                      </span>
+                    </div>
                   </div>
                   <div class="col-6">
                     <label for="supplier">Supplier</label>
                     <select
                       v-model="product.supplier"
+                      @change="$v.product.supplier.$touch()"
                       name="supplier"
                       id="supplier"
                       class="form-control"
@@ -114,6 +167,14 @@
                         >{{ supplier.name }}
                       </option>
                     </select>
+                    <div v-if="$v.product.supplier.$error">
+                      <span
+                        v-if="!$v.product.supplier.required"
+                        class="text-danger"
+                      >
+                        Product supplier is required
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -121,18 +182,31 @@
                     <label for="description">Description</label>
                     <textarea
                       v-model="product.description"
+                      @input="$v.product.description.$touch()"
                       class="no-resize form-control"
                       name="description"
                       id="description"
                       rows="10"
                       placeholder="Description..."
                     />
+                    <div v-if="$v.product.description.$error">
+                      <span
+                        v-if="!$v.product.description.required"
+                        class="text-danger"
+                      >
+                        Product description is required
+                      </span>
+                    </div>
                   </div>
                 </div>
               </form>
             </div>
             <div class="save-changes float-right">
-              <button @click="createProduct(product)" class="btn btn-primary">
+              <button
+                @click="createProductAction"
+                :disabled="isFormValid"
+                class="btn btn-primary"
+              >
                 Save changes
               </button>
               <button class="btn btn-outline-danger ml-2">Reset</button>
@@ -205,9 +279,9 @@
                         id="female"
                         value="female"
                       />
-                      <label class="form-check-label" for="female"
-                        >Female</label
-                      >
+                      <label class="form-check-label" for="female">
+                        Female
+                      </label>
                     </div>
                   </div>
                   <div class="col-6">
@@ -233,11 +307,16 @@
 </template>
 
 <script>
+import { required, minValue } from 'vuelidate/lib/validators';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
+
 export default {
   name: 'ProductCreate',
   computed: {
-    ...mapGetters(['getAllCategories', 'getAllSuppliers'])
+    ...mapGetters(['getAllCategories', 'getAllSuppliers']),
+    isFormValid() {
+      return this.$v.product.$invalid;
+    }
   },
   data() {
     return {
@@ -253,6 +332,33 @@ export default {
       }
     };
   },
+  validations: {
+    product: {
+      sku: {
+        required
+      },
+      name: {
+        required
+      },
+      description: {
+        required
+      },
+      quantity: {
+        required,
+        minValue: minValue(1)
+      },
+      price: {
+        required,
+        minValue: minValue(1)
+      },
+      category: {
+        required
+      },
+      supplier: {
+        required
+      }
+    }
+  },
   methods: {
     ...mapMutations(['setShowLoading', 'setAllCategories', 'setAllSuppliers']),
     ...mapActions(['fetchAllCategories', 'fetchAllSuppliers', 'createProduct']),
@@ -267,6 +373,13 @@ export default {
           .substr(2, 9)
           .toUpperCase()
       );
+    },
+    createProductAction() {
+      const product = this.createProduct(this.product);
+      product.then(id => {
+        this.$router.push({ name: 'productDetail', params: { id } });
+        this.setShowLoading(false);
+      });
     }
   },
   created() {

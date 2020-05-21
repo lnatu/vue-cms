@@ -113,13 +113,8 @@ export default {
     ...mapActions(['fetchUsers']),
     showData() {
       const query = this.$route.query;
-      let queryString = '';
-      for (let item in query) {
-        queryString += `${item}=${query[item]}&`;
-      }
-      queryString = queryString.substring(0, queryString.length - 1);
       const _this = this;
-      this.fetchUsers(queryString).then(res => {
+      this.fetchUsers(query).then(res => {
         this.setAllUsers(res.data.users)
         if (res.results > 0) {
           _this.pages = Math.ceil(res.pages / parseInt(query.limit));

@@ -38,28 +38,79 @@
                   <div class="col-6">
                     <label for="name">Name</label>
                     <input
+                      v-model="supplier.name"
+                      @input="$v.supplier.name.$touch()"
                       id="name"
                       class="form-control"
                       type="text"
                       name="name"
                       placeholder="Name"
                     />
+                    <div v-if="$v.supplier.name.$error">
+                      <span
+                        v-if="!$v.supplier.name.required"
+                        class="text-danger"
+                      >
+                        Supplier name is required
+                      </span>
+                    </div>
                   </div>
                   <div class="col-6">
                     <label for="email">Email</label>
                     <input
+                      v-model="supplier.email"
+                      @input="$v.supplier.email.$touch()"
                       id="email"
                       class="form-control"
                       type="email"
                       name="email"
                       placeholder="Email"
                     />
+                    <div v-if="$v.supplier.email.$error">
+                      <span
+                        v-if="!$v.supplier.email.required"
+                        class="text-danger"
+                      >
+                        Supplier name is required
+                      </span>
+                      <span v-if="!$v.supplier.email.email" class="text-danger">
+                        Email not valid
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="col-12">
+                    <label for="phone">Phone</label>
+                    <input
+                      v-model="supplier.phone"
+                      @input="$v.supplier.phone.$touch()"
+                      id="phone"
+                      class="form-control"
+                      type="text"
+                      name="phone"
+                      placeholder="Phone"
+                    />
+                    <div v-if="$v.supplier.phone.$error">
+                      <span
+                        v-if="!$v.supplier.phone.required"
+                        class="text-danger"
+                      >
+                        Supplier phone is required
+                      </span>
+                    </div>
                   </div>
                 </div>
               </form>
             </div>
             <div class="save-changes float-right">
-              <button class="btn btn-primary">Save changes</button>
+              <button
+                @click="createSupplierAction"
+                :disabled="isFormValid"
+                class="btn btn-primary"
+              >
+                Save changes
+              </button>
               <button class="btn btn-outline-danger ml-2">Reset</button>
             </div>
           </div>
@@ -158,14 +209,44 @@
 </template>
 
 <script>
+import { required, email } from 'vuelidate/lib/validators';
+import { mapMutations, mapActions } from 'vuex';
+
 export default {
   name: 'SupplierCreate',
+  computed: {
+    isFormValid() {
+      return this.$v.supplier.$invalid;
+    }
+  },
   data() {
     return {
-      tabShow: true
+      tabShow: true,
+      supplier: {
+        name: '',
+        email: '',
+        phone: ''
+      }
     };
   },
+  validations: {
+    supplier: {
+      name: { required },
+      email: {
+        required,
+        email
+      },
+      phone: { required }
+    }
+  },
   methods: {
+    ...mapMutations(['setShowLoading']),
+    ...mapActions(['createSupplier']),
+    async createSupplierAction() {
+      this.setShowLoading(true);
+      const id = await this.createSupplier(this.supplier);
+      this.$router.push({ name: 'supplierDetail', params: { id } });
+    },
     tabToggle() {
       this.tabShow = !this.tabShow;
     }

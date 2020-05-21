@@ -104,45 +104,32 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Phone</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
+            <tr v-if="getAllSuppliers.length === 0">
+              <td colspan="5">No data</td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
+            <tr
+              v-else
+              v-for="(supplier, index) in getAllSuppliers"
+              :key="supplier._id"
+            >
+              <th scope="row">{{ index + 1 }}</th>
+              <td>{{ supplier.name }}</td>
+              <td>{{ supplier.email }}</td>
+              <td>{{ supplier.phone }}</td>
+              <td>
+                <router-link
+                  :to="{ name: 'supplierDetail', params: { id: supplier._id } }"
+                >
+                  <i class="fas fa-eye"></i>
+                </router-link>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -152,8 +139,26 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
-  name: 'SupplierList'
+  name: 'SupplierList',
+  computed: {
+    ...mapGetters(['getAllSuppliers'])
+  },
+  methods: {
+    ...mapMutations(['setShowLoading', 'setAllSuppliers']),
+    ...mapActions(['fetchAllSuppliers']),
+    async showSuppliers() {
+      this.setShowLoading(true);
+      const response = await this.fetchAllSuppliers();
+      const suppliers = response.data.data.suppliers;
+      this.setAllSuppliers(suppliers);
+      this.setShowLoading(false);
+    }
+  },
+  created() {
+    this.showSuppliers();
+  }
 };
 </script>
 
