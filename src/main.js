@@ -25,13 +25,18 @@ router.beforeEach((to, from, next) => {
       next();
     } else {
       next({ name: 'Login' });
+      vm.$toasted.show('Please login first', {
+        theme: 'bubble',
+        position: 'top-center',
+        duration: 2000
+      });
     }
   } else {
     next();
   }
 });
 
-new Vue({
+const vm = new Vue({
   router,
   store,
   render: h => h(App)

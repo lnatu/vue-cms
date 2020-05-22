@@ -336,19 +336,36 @@ export default {
         );
       }
 
-      Promise.all(orderDetailItem)
-        .then(res => {
-          res.forEach(item => {
-            this.order.orderDetail.push(item.data.data.orderDetail._id);
-          });
-
-          return true;
-        })
-        .then(async res => {
-          const response = await this.createOrder(this.order);
-          const orderId = response.data.data.order._id;
-          this.$router.push({ name: 'orderDetail', params: { id: orderId } });
+      try {
+        const response = await Promise.all(orderDetailItem);
+        response.forEach(item => {
+          this.order.orderDetail.push(item.data.data.orderDetail._id);
         });
+      } catch (err) {
+        console.log(err.response);
+      }
+
+      try {
+        if (this.order.orderDetail.length === 0) {
+          this.setShowLoading(false);
+          this.$toasted.show('Please choose some product', {
+            theme: 'bubble',
+            position: 'bottom-right',
+            duration: 5000
+          });
+        } else {
+          const orderResponse = await this.createOrder(this.order);
+          const orderId = orderResponse.data.data.order._id;
+          this.$router.push({ name: 'orderDetail', params: { id: orderId } });
+        }
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     },
     tabToggle() {
       this.tabShow = !this.tabShow;

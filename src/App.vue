@@ -116,6 +116,8 @@ export default {
   methods: {
     ...mapActions(['logout']),
     ...mapMutations(['setIsLogin', 'setAuthUser'])
+  },
+  created () {
   }
 };
 </script>

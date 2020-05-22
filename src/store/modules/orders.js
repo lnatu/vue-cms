@@ -49,13 +49,7 @@ const actions = {
     }
   },
   async createOrder({ commit }, payload) {
-    try {
-      return await axios.post('/api/v1/orders/', payload);
-    } catch (err) {
-      console.log(err);
-      console.log(err.response);
-      commit('setShowLoading', false);
-    }
+    return await axios.post('/api/v1/orders/', payload);
   }
 };
 
