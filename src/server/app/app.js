@@ -1,5 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
+const cookieParser = require('cookie-parser');
 const AppError = require('./../utils/AppError');
 const ErrorController = require('./../controllers/ErrorController');
 
@@ -9,7 +10,13 @@ const app = express();
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
 app.use(express.json());
+app.use(cookieParser());
+app.use((req, res, next) => {
+  console.log(req.cookies);
+  next();
+});
 
 const apiVersion = '/api/v1';
 

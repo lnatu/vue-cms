@@ -54,6 +54,29 @@ exports.signup = catchError(async (req, res, next) => {
   createSendToken(user, 201, res);
 });
 
+exports.isLoggedIn = catchError(async (req, res, next) => {
+  if (req.cookies.jwt) {
+    const decoded = await promisify(jwt.verify)(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const currentUser = await UserModel.findById(decoded.id);
+
+    if (!currentUser) {
+      return next();
+    }
+
+    if (currentUser.changedPassword(decoded.iat)) {
+      return next();
+    }
+
+    res.locals.user = currentUser;
+    next();
+  }
+  next();
+});
+
 exports.login = catchError(async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -70,6 +93,15 @@ exports.login = catchError(async (req, res, next) => {
   createSendToken(user, 201, res);
 });
 
+exports.logout = (req, res) => {
+  res.cookie('jwt', 'logged-out', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true
+  });
+
+  res.status(200).json({ status: 'success' });
+};
+
 exports.protect = catchError(async (req, res, next) => {
   let token;
 
@@ -78,6 +110,8 @@ exports.protect = catchError(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) {

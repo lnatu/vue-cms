@@ -11,6 +11,11 @@ const getters = {
 const mutations = {
   setShowLoading(state, payload) {
     state.showLoading = payload;
+  },
+  removeAuth(state) {
+    state.authUser = null;
+    state.isLogin = false;
+    localStorage.removeItem("user");
   }
 };
 

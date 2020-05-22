@@ -39,6 +39,7 @@ const actions = {
       return res.data;
     } catch (err) {
       console.log(err.response);
+      commit('removeAuth');
       commit('setShowLoading', false);
     }
   },

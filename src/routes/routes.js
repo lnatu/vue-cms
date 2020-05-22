@@ -1,4 +1,7 @@
 import Home from '@/components/home/Index';
+import HomePage from '@/components/pages/Home';
+import Login from '@/components/pages/Login';
+import PageNotFound from '@/components/pages/PageNotFound';
 // Import user
 import UserCreate from '@/components/user/Create';
 import UserList from '@/components/user/List';
@@ -41,6 +44,7 @@ export const routes = [
   {
     path: '/users',
     component: UserStart,
+    meta: { onlyAuthUser: true },
     children: [
       {
         path: 'list',
@@ -120,6 +124,7 @@ export const routes = [
   {
     path: '/orders',
     component: OrderStart,
+    meta: { onlyAuthUser: true },
     children: [
       {
         path: 'list',
@@ -169,5 +174,15 @@ export const routes = [
         name: 'groupCreate'
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
+  {
+    path: '*',
+    name: 'PageNotFound',
+    component: PageNotFound
   }
 ];

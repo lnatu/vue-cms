@@ -42,7 +42,7 @@
                       class="form-control"
                       type="text"
                       name="userName"
-                      value="Test"
+                      :value="creatorName"
                       disabled
                     />
                   </div>
@@ -275,15 +275,16 @@ import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   name: 'OrderCreate',
   computed: {
-    ...mapGetters(['getAllProducts', 'getAllCustomers'])
+    ...mapGetters(['getAuthUser', 'getAllProducts', 'getAllCustomers'])
   },
   data() {
     return {
       tabShow: true,
       orderDetail: {},
       total: 0,
+      creatorName: '',
       order: {
-        createdBy: '5ec4e6eda2698f3ecc6965f8',
+        createdBy: '',
         customer: '',
         orderDetail: [],
         shipDate: ''
@@ -356,6 +357,8 @@ export default {
   created() {
     this.showCustomers();
     this.fetchAllProducts();
+    this.order.createdBy = this.getAuthUser._id;
+    this.creatorName = `${this.getAuthUser.firstName} ${this.getAuthUser.lastName}`;
   }
 };
 </script>
