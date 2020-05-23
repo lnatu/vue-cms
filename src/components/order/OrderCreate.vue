@@ -55,7 +55,7 @@
                       class="form-control"
                     >
                       <option
-                        v-for="customer in getAllCustomers"
+                        v-for="customer in getAllUsers"
                         :key="customer._id"
                         :value="customer._id"
                       >
@@ -172,7 +172,9 @@
               >
                 Save changes
               </button>
-              <button class="btn btn-outline-danger ml-2">Reset</button>
+              <button @click="resetOrder" class="btn btn-outline-danger ml-2">
+                Reset
+              </button>
             </div>
           </div>
 
@@ -275,7 +277,12 @@ import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   name: 'OrderCreate',
   computed: {
-    ...mapGetters(['getAuthUser', 'getAllProducts', 'getAllCustomers'])
+    ...mapGetters([
+      'getAuthUser',
+      'getAllProducts',
+      'getAllUsers',
+      'getAllCustomers'
+    ])
   },
   data() {
     return {
@@ -292,13 +299,17 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setShowLoading', 'setCustomers']),
+    ...mapMutations(['setShowLoading', 'setCustomers', 'setAllUsers']),
     ...mapActions([
       'createOrderDetail',
       'createOrder',
       'fetchAllProducts',
-      'fetchCustomers'
+      'fetchCustomers',
+      'fetchUsers'
     ]),
+    resetOrder() {
+      this.orderDetail = {};
+    },
     addOrderDetail(productId, productName, productPrice, quantity) {
       if (this.orderDetail[productId]) {
         this.orderDetail[productId].quantity += 1;
@@ -321,10 +332,13 @@ export default {
       }
     },
     async showCustomers() {
-      const response = await this.fetchCustomers();
-      const customers = response.data.data.users;
-      this.order.customer = customers[0]._id;
-      this.setCustomers(customers);
+      // const response = await this.fetchCustomers();
+      // const customers = response.data.data.users;
+      // this.order.customer = customers[0]._id;
+      // this.setCustomers(customers);
+      const response = await this.fetchUsers();
+      this.setAllUsers(response.data.users);
+      this.order.customer = response.data.users[0]._id;
     },
     async createOrderDetailAction() {
       this.setShowLoading(true);

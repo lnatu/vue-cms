@@ -78,6 +78,30 @@
                       User
                     </label>
                   </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      v-model="group.roles"
+                      class="form-check-input"
+                      type="checkbox"
+                      id="inlineCheckbox3"
+                      value="customer"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox3">
+                      Customer
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      v-model="group.roles"
+                      class="form-check-input"
+                      type="checkbox"
+                      id="inlineCheckbox4"
+                      value="staff"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox4">
+                      Staff
+                    </label>
+                  </div>
                   <div v-if="$v.group.roles.$error">
                     <span v-if="!$v.group.roles.required" class="text-danger">
                       Roles is required

@@ -91,16 +91,20 @@
                     </div>
                   </div>
                   <div class="col-6">
-                    <label for="role">Role</label>
+                    <label for="group">Group</label>
                     <select
-                      v-model="user.role"
-                      name="role"
-                      id="role"
+                      v-model="user.group"
+                      name="group"
+                      id="group"
                       class="form-control"
                     >
-                      <option value="admin" selected>Admin</option>
-                      <option value="user">User</option>
-                      <option value="staff">Staff</option>
+                      <option
+                        v-for="group in getAllGroups"
+                        :key="group._id"
+                        :value="group._id"
+                      >
+                        {{ group.name }}
+                      </option>
                     </select>
                   </div>
                 </div>
@@ -139,10 +143,16 @@
                       placeholder="Password"
                     />
                     <div v-if="$v.user.password.$error">
-                      <span v-if="!$v.user.password.required" class="text-danger">
+                      <span
+                        v-if="!$v.user.password.required"
+                        class="text-danger"
+                      >
                         Password is required
                       </span>
-                      <span v-if="!$v.user.password.minLength" class="text-danger">
+                      <span
+                        v-if="!$v.user.password.minLength"
+                        class="text-danger"
+                      >
                         Password must be 8 characters long
                       </span>
                     </div>
@@ -159,7 +169,10 @@
                       placeholder="Password confirm"
                     />
                     <div v-if="$v.user.passwordConfirm.$error">
-                      <span v-if="!$v.user.passwordConfirm.required" class="text-danger">
+                      <span
+                        v-if="!$v.user.passwordConfirm.required"
+                        class="text-danger"
+                      >
                         Confirm your password
                       </span>
                       <span v-if="!$v.user.password.sameAs" class="text-danger">
@@ -281,10 +294,11 @@
 
 <script>
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators';
-import { mapMutations, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 export default {
   name: 'UserCreate',
   computed: {
+    ...mapGetters(['getAllGroups']),
     isFormValid() {
       return this.$v.user.$invalid;
     }
@@ -297,7 +311,7 @@ export default {
         email: '',
         password: '',
         passwordConfirm: '',
-        role: 'user',
+        group: '',
         isActive: true
       },
       tabShow: true
@@ -323,14 +337,14 @@ export default {
         required,
         sameAsPassword: sameAs('password')
       },
-      role: {
+      group: {
         required
       }
     }
   },
   methods: {
     ...mapMutations(['setShowLoading']),
-    ...mapActions(['createUser']),
+    ...mapActions(['createUser', 'fetchAllGroups']),
     resetInput() {
       Object.keys(this.user).forEach(key => {
         if (key !== 'isActive') {
@@ -348,6 +362,11 @@ export default {
     tabToggle() {
       this.tabShow = !this.tabShow;
     }
+  },
+  created() {
+    this.fetchAllGroups().then(groups => {
+      this.user.group = groups[0]._id;
+    });
   }
 };
 </script>

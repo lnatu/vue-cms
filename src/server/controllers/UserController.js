@@ -4,7 +4,6 @@ const catchError = require('./../utils/catchError');
 const UserModel = require('./../models/UserModel');
 
 exports.getAllUsers = catchError(async (req, res) => {
-  const pages = await UserModel.count();
   const features = new APIFeatures(UserModel.find(), req.query)
     .filter()
     .sort()
@@ -12,6 +11,7 @@ exports.getAllUsers = catchError(async (req, res) => {
     .paginate();
 
   const users = await features.query;
+  const pages = await UserModel.find(features.count()).count();
 
   res.status(200).json({
     status: 'success',

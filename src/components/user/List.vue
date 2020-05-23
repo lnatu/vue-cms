@@ -39,7 +39,7 @@
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Email</th>
-              <th scope="col">Role</th>
+              <th scope="col">Group</th>
               <th scope="col">Actions</th>
             </tr>
           </thead>
@@ -54,7 +54,7 @@
                 <span class="ml-1">{{ user.lastName }}</span>
               </td>
               <td class="text-primary">{{ user.email }}</td>
-              <td>{{ user.role }}</td>
+              <td>{{ user.group.name }}</td>
               <td>
                 <router-link
                   :to="{ name: 'userDetail', params: { id: user._id } }"
@@ -75,7 +75,11 @@
               :key="page"
               :to="{
                 name: 'userList',
-                query: { page, limit: $route.query.limit }
+                query: {
+                  page,
+                  limit: $route.query.limit,
+                  role: $route.query.role
+                }
               }"
               active-class="active"
               exact
@@ -115,7 +119,7 @@ export default {
       const query = this.$route.query;
       const _this = this;
       this.fetchUsers(query).then(res => {
-        this.setAllUsers(res.data.users)
+        this.setAllUsers(res.data.users);
         if (res.results > 0) {
           _this.pages = Math.ceil(res.pages / parseInt(query.limit));
         }

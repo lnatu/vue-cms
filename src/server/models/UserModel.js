@@ -13,10 +13,10 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Please enter your last name'],
     trim: true
   },
-  role: {
-    type: String,
-    enum: ['customer', 'user', 'staff', 'manager', 'admin'],
-    default: 'user'
+  group: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Group',
+    required: [true, 'Please choose one group for user']
   },
   slug: String,
   email: {
@@ -61,6 +61,14 @@ const userSchema = new mongoose.Schema({
     type: Date,
     select: false
   }
+});
+
+userSchema.pre(/^find/, function(next) {
+  this.populate({
+    path: 'group',
+    select: '-__v'
+  });
+  next();
 });
 
 // Query middleware

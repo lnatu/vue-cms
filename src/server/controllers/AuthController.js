@@ -47,7 +47,7 @@ exports.signup = catchError(async (req, res, next) => {
     password: input.password,
     passwordConfirm: input.passwordConfirm,
     passwordChangedAt: input.passwordChangedAt,
-    role: input.role,
+    group: input.group,
     isActive: input.isActive
   });
 
@@ -138,7 +138,15 @@ exports.protect = catchError(async (req, res, next) => {
 
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
+    const groupRoles = req.user.group.roles;
+    let checkRole = false;
+    for (let i = 0; i < roles.length; i++) {
+      if (roles.includes(checkRole[i])) {
+        checkRole = true;
+        break;
+      }
+    }
+    if (checkRole) {
       return next(
         new AppError('You do not have permission to perform this action', 403)
       );

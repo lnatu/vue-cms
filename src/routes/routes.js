@@ -52,20 +52,21 @@ export const routes = [
         name: 'userList'
       },
       {
-        path: ':id',
-        component: UserDetail,
-        name: 'userDetail'
-      },
-      {
         path: 'create',
         component: UserCreate,
         name: 'userCreate'
+      },
+      {
+        path: ':id',
+        component: UserDetail,
+        name: 'userDetail'
       }
     ]
   },
   {
     path: '/supplier',
     component: SupplierStart,
+    meta: { onlyAuthUser: true },
     children: [
       {
         path: 'list',
@@ -87,6 +88,7 @@ export const routes = [
   {
     path: '/products',
     component: ProductStart,
+    meta: { onlyAuthUser: true },
     children: [
       {
         path: 'list',
@@ -108,6 +110,7 @@ export const routes = [
   {
     path: '/categories',
     component: CategoryStart,
+    meta: { onlyAuthUser: true },
     children: [
       {
         path: 'list',
@@ -146,6 +149,7 @@ export const routes = [
   {
     path: '/purchases',
     component: PurchaseStart,
+    meta: { onlyAuthUser: true },
     children: [
       {
         path: 'list',
@@ -162,6 +166,7 @@ export const routes = [
   {
     path: '/groups',
     component: GroupStart,
+    meta: { onlyAuthUser: true },
     children: [
       {
         path: 'list',

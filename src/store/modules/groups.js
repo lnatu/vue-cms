@@ -26,12 +26,13 @@ const mutations = {
 const actions = {
   fetchAllGroups({ commit }) {
     commit('setShowLoading', true);
-    axios
+    return axios
       .get('/api/v1/groups')
       .then(res => {
         const groups = res.data.data.groups;
         commit('setAllGroups', groups);
         commit('setShowLoading', false);
+        return groups;
       })
       .catch(err => console.log(err));
   },

@@ -41,9 +41,9 @@ const importData = async () => {
 // Delete all data from collection
 const deleteData = async () => {
   try {
-    await CategoryModel.deleteMany();
+    // await CategoryModel.deleteMany();
     await UserModel.deleteMany();
-    await SupplierModel.deleteMany();
+    // await SupplierModel.deleteMany();
     console.log('Data successfully deleted!');
   } catch (err) {
     console.log(err);
