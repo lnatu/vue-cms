@@ -189,7 +189,7 @@ export default {
     createGroupAction() {
       let roles = [];
       this.group.roles.forEach(name => {
-        roles.push({ name });
+        roles.push(name);
       });
       this.group.roles = roles;
       this.createGroup(this.group);

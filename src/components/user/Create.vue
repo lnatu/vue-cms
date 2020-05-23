@@ -352,12 +352,20 @@ export default {
         }
       });
     },
-    createUserAction() {
+    async createUserAction() {
       this.setShowLoading(true);
-      this.createUser(this.user).then(id => {
-        this.setShowLoading(false);
+      try {
+        const response = await this.createUser(this.user);
+        const id = response.data.data.user._id;
         this.$router.push({ name: 'userDetail', params: { id } });
-      });
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     },
     tabToggle() {
       this.tabShow = !this.tabShow;

@@ -139,14 +139,16 @@ exports.protect = catchError(async (req, res, next) => {
 exports.restrictTo = (...roles) => {
   return (req, res, next) => {
     const groupRoles = req.user.group.roles;
+    console.log(groupRoles)
+    console.log(roles)
     let checkRole = false;
-    for (let i = 0; i < roles.length; i++) {
-      if (roles.includes(checkRole[i])) {
+    for (let i = 0; i < groupRoles.length; i++) {
+      if (roles.includes(groupRoles[i])) {
         checkRole = true;
         break;
       }
     }
-    if (checkRole) {
+    if (!checkRole) {
       return next(
         new AppError('You do not have permission to perform this action', 403)
       );

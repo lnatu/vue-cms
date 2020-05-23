@@ -116,7 +116,7 @@
             <tr v-else v-for="(group, index) in getAllGroups" :key="index">
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ group.name }}</td>
-              <td>
+              <td class="g-roles">
                 <span v-for="(role, roleIndex) in group.roles" :key="roleIndex">
                   {{ role.name }}
                 </span>
@@ -153,4 +153,9 @@ export default {
 
 <style scoped lang="scss">
 @import '@/assets/scss/common';
+.g-roles span + span {
+  &::before {
+    content: '/';
+  }
+}
 </style>

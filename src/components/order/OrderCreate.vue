@@ -55,7 +55,7 @@
                       class="form-control"
                     >
                       <option
-                        v-for="customer in getAllUsers"
+                        v-for="customer in getAllCustomers"
                         :key="customer._id"
                         :value="customer._id"
                       >
@@ -332,13 +332,10 @@ export default {
       }
     },
     async showCustomers() {
-      // const response = await this.fetchCustomers();
-      // const customers = response.data.data.users;
-      // this.order.customer = customers[0]._id;
-      // this.setCustomers(customers);
-      const response = await this.fetchUsers();
-      this.setAllUsers(response.data.users);
-      this.order.customer = response.data.users[0]._id;
+      const response = await this.fetchCustomers();
+      const customers = response.data.data.customers;
+      this.order.customer = customers[0]._id;
+      this.setCustomers(customers);
     },
     async createOrderDetailAction() {
       this.setShowLoading(true);

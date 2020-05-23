@@ -48,13 +48,7 @@ const actions = {
     }
   },
   async createProduct({ commit }, payload) {
-    commit('setShowLoading', true);
-    try {
-      const response = await axios.post('/api/v1/products', payload);
-      return response.data.data.product._id;
-    } catch (err) {
-      console.log(err.response);
-    }
+    return await axios.post('/api/v1/products', payload);
   }
 };
 

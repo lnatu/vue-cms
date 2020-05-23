@@ -374,12 +374,19 @@ export default {
           .toUpperCase()
       );
     },
-    createProductAction() {
-      const product = this.createProduct(this.product);
-      product.then(id => {
+    async createProductAction() {
+      this.setShowLoading(true);
+      try {
+        const id = await this.createProduct(this.product);
         this.$router.push({ name: 'productDetail', params: { id } });
+      } catch (err) {
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
         this.setShowLoading(false);
-      });
+      }
     }
   },
   created() {

@@ -43,8 +43,8 @@
                   </p>
                 </div>
                 <div class="account-detail__row">
-                  <p class="account-detail__dn">Role</p>
-                  <p class="account-detail__tn">{{ getUser.role }}</p>
+                  <p class="account-detail__dn">Group</p>
+                  <p class="account-detail__tn">{{ getUser.group.name }}</p>
                 </div>
               </div>
             </div>

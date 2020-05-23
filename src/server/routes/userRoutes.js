@@ -5,14 +5,21 @@ const router = express.Router();
 
 router.post('/login', AuthController.login);
 router.get('/logout', AuthController.logout);
-router.post('/signup', AuthController.signup);
 
 router.use(AuthController.protect);
+
+router.post(
+  '/signup',
+  AuthController.restrictTo('admin'),
+  AuthController.signup
+);
+
+router.route('/customers').get(UserController.getCustomers);
 
 router
   .route('/')
   .get(UserController.getAllUsers)
-  .post(UserController.createUser);
+  .post(AuthController.restrictTo('admin'), UserController.createUser);
 
 router
   .route('/:id')

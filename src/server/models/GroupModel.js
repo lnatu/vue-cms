@@ -6,7 +6,7 @@ const groupSchema = new mongoose.Schema({
     required: [true, 'Please enter group name']
   },
   roles: {
-    type: [Object],
+    type: Array,
     validate: {
       validator: function(array) {
         return array.length > 0;
@@ -28,6 +28,12 @@ const groupSchema = new mongoose.Schema({
     type: Date,
     select: false
   }
+});
+
+groupSchema.virtual('users', {
+  ref: 'User',
+  foreignField: 'group',
+  localField: '_id'
 });
 
 const GroupModel = mongoose.model('Group', groupSchema);

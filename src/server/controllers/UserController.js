@@ -82,3 +82,14 @@ exports.deleteUser = catchError(async (req, res, next) => {
     data: null
   });
 });
+
+exports.getCustomers = catchError(async (req, res, next) => {
+  const users = await UserModel.find();
+
+  const customers = users.filter(user => user.group.roles.includes('customer'));
+
+  res.status(200).json({
+    status: 'success',
+    data: { customers }
+  });
+});

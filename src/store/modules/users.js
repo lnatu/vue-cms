@@ -39,13 +39,12 @@ const actions = {
       return res.data;
     } catch (err) {
       console.log(err.response);
-      commit('removeAuth');
       commit('setShowLoading', false);
     }
   },
   async fetchCustomers({ commit }) {
     try {
-      return await axios.get('/api/v1/users?role=customer');
+      return await axios.get('/api/v1/users/customers');
     } catch (err) {
       console.log(err.response);
       commit('setShowLoading', false);
@@ -65,13 +64,8 @@ const actions = {
         console.log(err);
       });
   },
-  createUser({ commit }, payload) {
-    return axios
-      .post('/api/v1/users/signup', payload)
-      .then(res => {
-        return res.data.data.user._id;
-      })
-      .catch(err => console.log(err));
+  async createUser({ commit }, payload) {
+    return await axios.post('/api/v1/users/signup', payload);
   },
   deleteUser({ commit }, payload) {
     return axios

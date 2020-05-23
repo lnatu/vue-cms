@@ -2,65 +2,75 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: [true, 'Please enter your first name'],
-    trim: true
-  },
-  lastName: {
-    type: String,
-    required: [true, 'Please enter your last name'],
-    trim: true
-  },
-  group: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Group',
-    required: [true, 'Please choose one group for user']
-  },
-  slug: String,
-  email: {
-    type: String,
-    required: [true, 'Please enter your email'],
-    unique: true,
-    validate: [validator.isEmail, 'Please enter a correct email']
-  },
-  password: {
-    type: String,
-    required: [true, 'Please enter your password'],
-    minlength: [8, 'Password must has at least 8 characters'],
-    select: false
-  },
-  passwordConfirm: {
-    type: String,
-    required: [true, 'Please confirm your password'],
-    validate: {
-      validator: function(val) {
-        return this.password === val;
-      },
-      message: "Your passwords doesn't match"
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: [true, 'Please enter your first name'],
+      trim: true
+    },
+    lastName: {
+      type: String,
+      required: [true, 'Please enter your last name'],
+      trim: true
+    },
+    group: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Group',
+      required: [true, 'Please choose one group for user']
+    },
+    slug: String,
+    email: {
+      type: String,
+      required: [true, 'Please enter your email'],
+      unique: true,
+      validate: [validator.isEmail, 'Please enter a correct email']
+    },
+    password: {
+      type: String,
+      required: [true, 'Please enter your password'],
+      minlength: [8, 'Password must has at least 8 characters'],
+      select: false
+    },
+    passwordConfirm: {
+      type: String,
+      required: [true, 'Please confirm your password'],
+      validate: {
+        validator: function(val) {
+          return this.password === val;
+        },
+        message: "Your passwords doesn't match"
+      }
+    },
+    changedPasswordAt: Date,
+    isActive: {
+      type: Boolean,
+      default: true,
+      select: false
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+      select: false
+    },
+    updatedAt: {
+      type: Date,
+      default: Date.now(),
+      select: false
+    },
+    deletedAt: {
+      type: Date,
+      select: false
     }
   },
-  changedPasswordAt: Date,
-  isActive: {
-    type: Boolean,
-    default: true,
-    select: false
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-    select: false
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now(),
-    select: false
-  },
-  deletedAt: {
-    type: Date,
-    select: false
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
+);
+
+userSchema.virtual('role').get(function() {
+  return this.group.roles;
 });
 
 userSchema.pre(/^find/, function(next) {
