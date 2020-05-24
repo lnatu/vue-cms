@@ -118,7 +118,7 @@
               <td>{{ group.name }}</td>
               <td class="g-roles">
                 <span v-for="(role, roleIndex) in group.roles" :key="roleIndex">
-                  {{ role.name }}
+                  {{ role }}
                 </span>
               </td>
               <td>

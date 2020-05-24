@@ -6,7 +6,10 @@
           <h3 class="mb-0">Account</h3>
         </div>
         <div class="card-body">
-          <div class="account">
+          <div v-if="Object.keys(getUser).length === 0">
+            <h3 class="mb-0">No user found</h3>
+          </div>
+          <div v-else class="account">
             <div class="account-left">
               <div class="account-thumbnail">
                 <img
@@ -14,19 +17,6 @@
                   src="../../assets/img/avatar04.png"
                   alt="avatar"
                 />
-                <div class="account-cta mt-3">
-                  <button class="btn btn-success mr-3">
-                    <i class="fas fa-pencil-alt"></i>
-                    Edit
-                  </button>
-                  <button
-                    class="btn btn-outline-danger"
-                    @click="deleteUserAction"
-                  >
-                    <i class="fas fa-trash-alt"></i>
-                    Delete
-                  </button>
-                </div>
               </div>
               <div class="account-detail">
                 <div class="account-detail__row">
@@ -75,16 +65,16 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(['setShowLoading']),
-    ...mapActions(['fetchUser', 'deleteUser']),
-    deleteUserAction() {
-      this.deleteUser(this.userId).then(data => {
-        this.$router.go(0);
-      });
+    ...mapMutations(['setShowLoading', 'setUser']),
+    ...mapActions(['fetchUser']),
+    async showUer() {
+      const response = await this.fetchUser(this.userId);
+      const user = response.data.data.user;
+      this.setUser(user);
     }
   },
   created() {
-    this.fetchUser(this.userId);
+    this.showUer();
   }
 };
 </script>

@@ -6,7 +6,7 @@ class ApiFeatures {
 
   filter() {
     const queryObj = { ...this.queryString };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    const excludedFields = ['page', 'sort', 'limit', 'fields', 'search'];
     excludedFields.forEach(field => delete queryObj[field]);
 
     let queryString = JSON.stringify(queryObj);
@@ -53,7 +53,7 @@ class ApiFeatures {
 
   count() {
     const queryObj = { ...this.queryString };
-    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    const excludedFields = ['page', 'sort', 'limit', 'fields', 'search'];
     excludedFields.forEach(field => delete queryObj[field]);
 
     return queryObj;

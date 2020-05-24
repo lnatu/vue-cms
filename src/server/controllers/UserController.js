@@ -4,7 +4,11 @@ const catchError = require('./../utils/catchError');
 const UserModel = require('./../models/UserModel');
 
 exports.getAllUsers = catchError(async (req, res) => {
-  const features = new APIFeatures(UserModel.find(), req.query)
+  let searchObj = {};
+  if (req.query.search) {
+    searchObj = { $text: { $search: req.query.search } };
+  }
+  const features = new APIFeatures(UserModel.find(searchObj), req.query)
     .filter()
     .sort()
     .limitFields()
@@ -50,7 +54,15 @@ exports.createUser = catchError(async (req, res, next) => {
 });
 
 exports.updateUser = catchError(async (req, res, next) => {
-  const user = await UserModel.findByIdAndUpdate(req.params.id, req.body, {
+  const input = req.body;
+  const acceptedInput = {
+    firstName: input.firstName,
+    lastName: input.lastName,
+    group: input.group,
+    email: input.email,
+    updatedAt: Date.now()
+  };
+  const user = await UserModel.findByIdAndUpdate(req.params.id, acceptedInput, {
     new: true,
     runValidators: true
   });

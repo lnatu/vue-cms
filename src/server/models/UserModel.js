@@ -69,9 +69,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.virtual('role').get(function() {
-  return this.group.roles;
-});
+userSchema.index({ '$**': 'text' });
 
 userSchema.pre(/^find/, function(next) {
   this.populate({

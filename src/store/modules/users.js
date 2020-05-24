@@ -3,7 +3,8 @@ const axios = require('axios');
 const state = {
   users: [],
   customers: [],
-  user: null
+  user: {},
+  updatedUserId: ''
 };
 
 const getters = {
@@ -15,6 +16,9 @@ const getters = {
   },
   getUser(state) {
     return state.user;
+  },
+  getUpdatedUserId(state) {
+    return state.updatedUserId;
   }
 };
 
@@ -27,6 +31,9 @@ const mutations = {
   },
   setUser(state, payload) {
     state.user = payload;
+  },
+  setUpdatedUserId(state, payload) {
+    state.updatedUserId = payload;
   }
 };
 
@@ -50,30 +57,19 @@ const actions = {
       commit('setShowLoading', false);
     }
   },
-  fetchUser({ commit }, payload) {
-    commit('setShowLoading', true);
-    axios
-      .get(`/api/v1/users/${payload}`)
-      .then(res => {
-        const user = res.data.data.user;
-        commit('setUser', user);
-        commit('setShowLoading', false);
-      })
-      .catch(err => {
-        commit('setShowLoading', false);
-        console.log(err);
-      });
+  async fetchUser({ commit }, payload) {
+    return await axios.get(`/api/v1/users/${payload}`);
   },
   async createUser({ commit }, payload) {
     return await axios.post('/api/v1/users/signup', payload);
   },
-  deleteUser({ commit }, payload) {
-    return axios
-      .delete(`/api/v1/users/${payload}`, { data: { isActive: false } })
-      .then(res => {
-        return true;
-      })
-      .catch(err => console.log(err));
+  async deleteUser({ commit }, payload) {
+    return await axios.delete(`/api/v1/users/${payload}`, {
+      data: { isActive: false }
+    });
+  },
+  async editUser({ commit }, { id, inputs }) {
+    return await axios.patch(`/api/v1/users/${id}`, inputs);
   }
 };
 

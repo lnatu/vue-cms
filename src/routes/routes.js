@@ -4,6 +4,7 @@ import Login from '@/components/pages/Login';
 import PageNotFound from '@/components/pages/PageNotFound';
 // Import user
 import UserCreate from '@/components/user/Create';
+import UserEdit from '@/components/user/Edit';
 import UserList from '@/components/user/List';
 import UserDetail from '@/components/user/UserDetail';
 import UserStart from '@/components/user/Start';
@@ -60,6 +61,11 @@ export const routes = [
         path: ':id',
         component: UserDetail,
         name: 'userDetail'
+      },
+      {
+        path: 'edit/:id',
+        component: UserEdit,
+        name: 'userEdit'
       }
     ]
   },
