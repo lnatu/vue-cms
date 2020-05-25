@@ -50,7 +50,11 @@
                 >
                   <i class="fas fa-eye"></i>
                 </router-link>
-                <a class="text-danger ml-4" href="#">
+                <a
+                  @click.prevent="deleteSupplierAction(supplier)"
+                  class="text-danger ml-4"
+                  href="#"
+                >
                   <i class="fas fa-recycle"></i>
                 </a>
                 <router-link
@@ -109,7 +113,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setShowLoading', 'setAllSuppliers']),
-    ...mapActions(['fetchAllSuppliers']),
+    ...mapActions(['fetchAllSuppliers', 'deleteSupplier']),
     async showSuppliers() {
       try {
         const query = this.$route.query;
@@ -134,6 +138,25 @@ export default {
         this.$router.push({
           name: 'supplierList',
           query
+        });
+      }
+    },
+    async deleteSupplierAction(supplier) {
+      this.setShowLoading(true);
+      try {
+        await this.deleteSupplier(supplier._id);
+        this.showSuppliers();
+        this.$toasted.show(`${supplier.name} deleted`, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
         });
       }
     }

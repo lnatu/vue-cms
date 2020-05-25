@@ -84,7 +84,9 @@ exports.updateSupplier = catchError(async (req, res, next) => {
 });
 
 exports.deleteSupplier = catchError(async (req, res, next) => {
-  const supplier = await SupplierModel.findByIdAndDelete(req.params.id);
+  const supplier = await SupplierModel.findByIdAndUpdate(req.params.id, {
+    isActive: false
+  });
 
   if (!supplier) {
     return next(

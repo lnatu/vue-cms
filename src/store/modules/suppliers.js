@@ -32,24 +32,16 @@ const actions = {
     }
   },
   async fetchSupplier({ commit }, payload) {
-    commit('setShowLoading', true);
-    try {
-      const response = await axios.get(`/api/v1/suppliers/${payload}`);
-      const supplier = response.data.data.supplier;
-      commit('setSupplier', supplier);
-      commit('setShowLoading', false);
-    } catch (err) {
-      console.log(err.response);
-      commit('setShowLoading', false);
-    }
+    return await axios.get(`/api/v1/suppliers/${payload}`);
   },
   async createSupplier({ commit }, payload) {
-    try {
-      const response = await axios.post('/api/v1/suppliers', payload);
-      return response.data.data.supplier._id;
-    } catch (err) {
-      console.log(err.response);
-    }
+    return await axios.post('/api/v1/suppliers', payload);
+  },
+  async updateSupplier({ commit }, { id, supplier }) {
+    return await axios.patch(`/api/v1/suppliers/${id}`, supplier);
+  },
+  async deleteSupplier({ commit }, supplierId) {
+    return await axios.delete(`/api/v1/suppliers/${supplierId}`);
   }
 };
 

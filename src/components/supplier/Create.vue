@@ -243,9 +243,19 @@ export default {
     ...mapMutations(['setShowLoading']),
     ...mapActions(['createSupplier']),
     async createSupplierAction() {
-      this.setShowLoading(true);
-      const id = await this.createSupplier(this.supplier);
-      this.$router.push({ name: 'supplierDetail', params: { id } });
+      try {
+        this.setShowLoading(true);
+        const response = await this.createSupplier(this.supplier);
+        const id = response.data.data.supplier._id;
+        this.$router.push({ name: 'supplierDetail', params: { id } });
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     },
     tabToggle() {
       this.tabShow = !this.tabShow;

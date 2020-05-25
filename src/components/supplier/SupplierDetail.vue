@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'SupplierDetail',
@@ -41,10 +41,27 @@ export default {
     ...mapGetters(['getSupplier'])
   },
   methods: {
-    ...mapActions(['fetchSupplier'])
+    ...mapMutations(['setShowLoading', 'setSupplier']),
+    ...mapActions(['fetchSupplier']),
+    async showSupplier() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchSupplier(this.$route.params.id);
+        const supplier = response.data.data.supplier;
+        this.setSupplier(supplier);
+        this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
+    }
   },
   created() {
-    this.fetchSupplier(this.$route.params.id);
+    this.showSupplier();
   }
 };
 </script>
