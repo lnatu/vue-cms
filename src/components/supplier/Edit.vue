@@ -1,13 +1,11 @@
 <template>
-    <p>Supplier Edit</p>
+  <p>Supplier Edit</p>
 </template>
 
 <script>
-  export default {
-    name: 'Edit'
-  };
+export default {
+  name: 'Edit'
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

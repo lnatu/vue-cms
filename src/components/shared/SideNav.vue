@@ -96,7 +96,10 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <router-link :to="{ name: 'supplierList' }" class="nav-link">
+                <router-link
+                  :to="{ name: 'supplierList', query: { page: 1, limit: 20 } }"
+                  class="nav-link"
+                >
                   <i class="fas fa-list nav-icon"></i>
                   <p>List</p>
                 </router-link>

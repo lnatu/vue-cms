@@ -22,6 +22,10 @@ const supplierSchema = new mongoose.Schema({
     street: String,
     zip: String
   },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -36,6 +40,13 @@ const supplierSchema = new mongoose.Schema({
     type: Date,
     select: false
   }
+});
+
+supplierSchema.index({ '$**': 'text' });
+
+supplierSchema.pre(/^find.*(?<!Update)$/, function(next) {
+  this.find({ isActive: { $ne: false } });
+  next();
 });
 
 const SupplierModel = mongoose.model('Supplier', supplierSchema);

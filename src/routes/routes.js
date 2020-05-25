@@ -13,6 +13,7 @@ import SupplierStart from '@/components/supplier/Start';
 import SupplierList from '@/components/supplier/List';
 import SupplierCreate from '@/components/supplier/Create';
 import SupplierDetail from '@/components/supplier/SupplierDetail';
+import SupplierEdit from '@/components/supplier/Edit';
 // Import product
 import ProductStart from '@/components/product/Start';
 import ProductList from '@/components/product/List';
@@ -35,6 +36,7 @@ import PurchaseCreate from '@/components/purchase/PurchaseCreate';
 import GroupStart from '@/components/group/GroupStart';
 import GroupList from '@/components/group/GroupList';
 import GroupCreate from '@/components/group/GroupCreate';
+import GroupEdit from '@/components/group/GroupEdit';
 
 export const routes = [
   {
@@ -83,6 +85,11 @@ export const routes = [
         path: 'create',
         component: SupplierCreate,
         name: 'supplierCreate'
+      },
+      {
+        path: 'edit/:id',
+        component: SupplierEdit,
+        name: 'supplierEdit'
       },
       {
         path: ':id',
@@ -183,6 +190,11 @@ export const routes = [
         path: 'create',
         component: GroupCreate,
         name: 'groupCreate'
+      },
+      {
+        path: 'edit/:id',
+        component: GroupEdit,
+        name: 'groupEdit'
       }
     ]
   },

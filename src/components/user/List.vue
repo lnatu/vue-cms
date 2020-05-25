@@ -43,7 +43,12 @@
                 <span class="ml-1">{{ user.lastName }}</span>
               </td>
               <td class="text-primary">{{ user.email }}</td>
-              <td>{{ user.group.name }}</td>
+              <td v-if="user.group">{{ user.group.name }}</td>
+              <td v-else>
+                <span class="badge badge-danger" style="font-size: 18px;">
+                  Group deleted
+                </span>
+              </td>
               <td>
                 <router-link
                   class="text-success"
@@ -81,7 +86,7 @@
                 query: {
                   page,
                   limit: $route.query.limit,
-                  role: $route.query.role
+                  search: $route.query.search
                 }
               }"
               active-class="active"

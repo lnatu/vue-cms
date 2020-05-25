@@ -4,7 +4,11 @@ const catchError = require('./../utils/catchError');
 const GroupModel = require('./../models/GroupModel');
 
 exports.getAllGroup = catchError(async (req, res, next) => {
-  const features = new APIFeatures(GroupModel.find(), req.query)
+  let searchObj = {};
+  if (req.query.search) {
+    searchObj = { $text: { $search: req.query.search } };
+  }
+  const features = new APIFeatures(GroupModel.find(searchObj), req.query)
     .filter()
     .sort()
     .limitFields()
@@ -66,7 +70,9 @@ exports.updateGroup = catchError(async (req, res, next) => {
 });
 
 exports.deleteGroup = catchError(async (req, res, next) => {
-  const group = await GroupModel.findByIdAndDelete(req.params.id);
+  const group = await GroupModel.findByIdAndUpdate(req.params.id, {
+    isActive: false
+  });
 
   if (!group) {
     return next(new AppError(`No group found with id: ${req.params.id}`, 404));

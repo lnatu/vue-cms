@@ -24,10 +24,10 @@ const mutations = {
 };
 
 const actions = {
-  fetchAllGroups({ commit }) {
+  fetchAllGroups({ commit }, params) {
     commit('setShowLoading', true);
     return axios
-      .get('/api/v1/groups')
+      .get('/api/v1/groups', params)
       .then(res => {
         const groups = res.data.data.groups;
         commit('setAllGroups', groups);
@@ -36,15 +36,17 @@ const actions = {
       })
       .catch(err => console.log(err));
   },
+  async fetchGroup({ commit }, payload) {
+    return await axios.get(`/api/v1/groups/${payload}`);
+  },
   async createGroup({ commit }, payload) {
-    commit('setShowLoading', true);
-    try {
-      await axios.post('/api/v1/groups', payload);
-      commit('setShowLoading', false);
-    } catch (err) {
-      console.log(err);
-      commit('setShowLoading', false);
-    }
+    return await axios.post('/api/v1/groups', payload);
+  },
+  async editGroup({ commit }, { id, group }) {
+    return await axios.patch(`/api/v1/groups/${id}`, group);
+  },
+  async deleteGroup({ commit }, payload) {
+    return await axios.delete(`/api/v1/groups/${payload}`);
   }
 };
 

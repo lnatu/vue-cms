@@ -1,13 +1,30 @@
+const APIFeatures = require('./../utils/APIFeatures');
 const AppError = require('./../utils/AppError');
 const catchError = require('./../utils/catchError');
 const SupplierModel = require('./../models/SupplierModel');
 
 exports.getAllSuppliers = catchError(async (req, res, next) => {
-  const suppliers = await SupplierModel.find();
+  let searchObj = {};
+  if (req.query.search) {
+    searchObj = { $text: { $search: req.query.search } };
+  }
+  const features = new APIFeatures(SupplierModel.find(searchObj), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+
+  const suppliers = await features.query;
+  let searchCount = features.count();
+  if (req.query.search) {
+    searchCount = searchObj;
+  }
+  const pages = await SupplierModel.find(searchCount).count();
 
   res.status(200).json({
     status: 'success',
     results: suppliers.length,
+    pages,
     data: {
       suppliers
     }

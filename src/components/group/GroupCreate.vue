@@ -153,7 +153,7 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators';
-import { mapActions } from 'vuex';
+import { mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'GroupCreate',
@@ -182,17 +182,24 @@ export default {
     }
   },
   methods: {
+    ...mapMutations(['setShowLoading']),
     ...mapActions(['createGroup']),
     tabToggle() {
       this.tabShow = !this.tabShow;
     },
-    createGroupAction() {
-      let roles = [];
-      this.group.roles.forEach(name => {
-        roles.push(name);
-      });
-      this.group.roles = roles;
-      this.createGroup(this.group);
+    async createGroupAction() {
+      this.setShowLoading(true);
+      try {
+        const res = await this.createGroup(this.group);
+        this.$router.push({ name: 'groupList' });
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     }
   }
 };

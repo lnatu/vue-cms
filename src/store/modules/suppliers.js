@@ -24,9 +24,9 @@ const mutations = {
 };
 
 const actions = {
-  async fetchAllSuppliers() {
+  async fetchAllSuppliers({ commit }, payload) {
     try {
-      return await axios.get('/api/v1/suppliers');
+      return await axios.get('/api/v1/suppliers', { params: payload });
     } catch (err) {
       console.log(err.response);
     }

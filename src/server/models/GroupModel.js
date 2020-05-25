@@ -14,6 +14,10 @@ const groupSchema = new mongoose.Schema({
       message: 'Please enter group role'
     }
   },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -30,10 +34,11 @@ const groupSchema = new mongoose.Schema({
   }
 });
 
-groupSchema.virtual('users', {
-  ref: 'User',
-  foreignField: 'group',
-  localField: '_id'
+groupSchema.index({ '$**': 'text' });
+
+groupSchema.pre(/^find.*(?<!Update)$/, function(next) {
+  this.find({ isActive: { $ne: false } });
+  next();
 });
 
 const GroupModel = mongoose.model('Group', groupSchema);
