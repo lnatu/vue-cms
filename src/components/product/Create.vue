@@ -377,7 +377,8 @@ export default {
     async createProductAction() {
       this.setShowLoading(true);
       try {
-        const id = await this.createProduct(this.product);
+        const response = await this.createProduct(this.product);
+        const id = response.data.data.product._id;
         this.$router.push({ name: 'productDetail', params: { id } });
       } catch (err) {
         this.$toasted.show(err.response.data.message, {

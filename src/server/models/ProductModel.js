@@ -23,7 +23,10 @@ const productSchema = new mongoose.Schema({
     required: [true, 'Please enter product price']
   },
   manufactureDetails: Object,
-  shippingDetail: Object,
+  isActive: {
+    type: Boolean,
+    default: true
+  },
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'Category',
@@ -50,11 +53,18 @@ const productSchema = new mongoose.Schema({
   }
 });
 
+productSchema.index({ name: 'text' });
+
 productSchema.pre(/^find/, function(next) {
   this.populate({ path: 'supplier', select: '-__v' }).populate({
     path: 'category',
     select: '-__v'
   });
+  next();
+});
+
+productSchema.pre(/^find.*(?<!Update)$/, function(next) {
+  this.find({ isActive: { $ne: false } });
   next();
 });
 

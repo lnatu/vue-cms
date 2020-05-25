@@ -24,16 +24,8 @@ const mutations = {
 };
 
 const actions = {
-  async fetchAllProducts({ commit }) {
-    commit('setShowLoading', true);
-    try {
-      const response = await axios.get('/api/v1/products');
-      const products = response.data.data.products;
-      commit('setAllProducts', products);
-      commit('setShowLoading', false);
-    } catch (err) {
-      console.log(err.response);
-    }
+  async fetchAllProducts() {
+    return await axios.get('/api/v1/products');
   },
   async fetchProduct({ commit }, payload) {
     commit('setShowLoading', true);
@@ -49,6 +41,9 @@ const actions = {
   },
   async createProduct({ commit }, payload) {
     return await axios.post('/api/v1/products', payload);
+  },
+  async deleteProduct({ commit }, payload) {
+    return await axios.delete(`/api/v1/products/${payload}`);
   }
 };
 

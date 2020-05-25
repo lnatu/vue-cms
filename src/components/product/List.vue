@@ -1,99 +1,6 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <div class="card filter-room">
-        <div class="card-header filter-room__header">
-          <h5 class="mb-0">Filters</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-3">
-              <p class="mb-0 text-filter">Role</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="roleFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="roleFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Admin</a>
-                  <a class="dropdown-item" href="#">User</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Status</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="statusFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="statusFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Active</a>
-                  <a class="dropdown-item" href="#">Deactivated</a>
-                  <a class="dropdown-item" href="#">Blocked</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Verified</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="verifyFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="verifyFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Yes</a>
-                  <a class="dropdown-item" href="#">No</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Department</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="departmentFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="departmentFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Sales</a>
-                  <a class="dropdown-item" href="#">Development</a>
-                  <a class="dropdown-item" href="#">Management</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12">
       <div class="bg-white p-3 rounded overflow-hidden">
         <div class="search-list">
           <div class="form-group w-25">
@@ -114,6 +21,9 @@
             </tr>
           </thead>
           <tbody>
+            <tr v-if="getAllProducts.length === 0">
+              <td colspan="8"><h2 class="mb-0">No data 😤</h2></td>
+            </tr>
             <tr v-for="(product, index) in getAllProducts" :key="product._id">
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ product.sku }}</td>
@@ -137,28 +47,117 @@
                 >
                   <i class="fas fa-eye"></i>
                 </router-link>
+                <a
+                  @click.prevent="deleteProductAction(product)"
+                  class="text-danger ml-4"
+                  href="#"
+                >
+                  <i class="fas fa-recycle"></i>
+                </a>
+                <router-link
+                  class="ml-4 text-warning"
+                  :to="{ name: 'productEdit', params: { id: product._id } }"
+                >
+                  <i class="fas fa-user-edit"></i>
+                </router-link>
               </td>
             </tr>
           </tbody>
         </table>
+        <nav v-if="pages > 0" aria-label="Page navigation example">
+          <ul class="pagination mt-5">
+            <li class="page-item">
+              <a class="page-link" href="#">Previous</a>
+            </li>
+            <router-link
+              v-for="page in pages"
+              :key="page"
+              :to="{
+                name: 'productList',
+                query: {
+                  page,
+                  limit: $route.query.limit,
+                  search: $route.query.search
+                }
+              }"
+              active-class="active"
+              exact
+              tag="li"
+              class="page-item"
+            >
+              <a class="page-link">{{ page }}</a>
+            </router-link>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'ProductList',
   computed: {
     ...mapGetters(['getAllProducts'])
   },
+  data() {
+    return {
+      searchString: '',
+      pages: 0
+    };
+  },
   methods: {
-    ...mapActions(['fetchAllProducts'])
+    ...mapMutations(['setShowLoading', 'setAllProducts']),
+    ...mapActions(['fetchAllProducts', 'deleteProduct']),
+    async showAllProducts() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchAllProducts();
+        const products = response.data.data.products;
+        this.pages = Math.ceil(
+          response.data.pages / parseInt(this.$route.query.limit)
+        );
+        this.setAllProducts(products);
+        this.setShowLoading(false);
+      } catch (err) {
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+        this.setShowLoading(false);
+      }
+    },
+    async deleteProductAction(product) {
+      this.setShowLoading(true);
+      try {
+        await this.deleteProduct(product._id);
+        this.$toasted.show(`${product.name} deleted`, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+        this.showAllProducts();
+      } catch (err) {
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+        this.setShowLoading(false);
+      }
+    }
   },
   created() {
-    this.fetchAllProducts();
+    this.showAllProducts();
+  },
+  watch: {
+    $route() {
+      this.showAllProducts();
+    }
   }
 };
 </script>

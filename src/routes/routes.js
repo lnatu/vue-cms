@@ -19,6 +19,7 @@ import ProductStart from '@/components/product/Start';
 import ProductList from '@/components/product/List';
 import ProductCreate from '@/components/product/Create';
 import ProductDetail from '@/components/product/ProductDetail';
+import ProductEdit from '@/components/product/Edit';
 // Import category
 import CategoryStart from '@/components/category/Start';
 import CategoryList from '@/components/category/List';
@@ -112,6 +113,11 @@ export const routes = [
         path: 'create',
         component: ProductCreate,
         name: 'productCreate'
+      },
+      {
+        path: 'edit/:id',
+        component: ProductEdit,
+        name: 'productEdit'
       },
       {
         path: ':id',
