@@ -1,12 +1,9 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <div v-if="getUser" class="card">
-        <div class="card-header">
-          <h3 class="mb-0">Account</h3>
-        </div>
+      <div class="card">
         <div class="card-body">
-          <div v-if="Object.keys(getUser).length === 0">
+          <div v-if="!user">
             <h3 class="mb-0">No user found</h3>
           </div>
           <div v-else class="account">
@@ -22,29 +19,24 @@
                 <div class="account-detail__row">
                   <p class="account-detail__dn">Name</p>
                   <p class="account-detail__tn">
-                    <span class="text-bold">{{ getUser.firstName }}</span>
-                    <span class="ml-1">{{ getUser.lastName }}</span>
+                    <span class="text-bold">{{ user.firstName }}</span>
+                    <span class="ml-1">{{ user.lastName }}</span>
                   </p>
                 </div>
                 <div class="account-detail__row">
                   <p class="account-detail__dn">Email</p>
                   <p class="account-detail__tn text-primary">
-                    {{ getUser.email }}
+                    {{ user.email }}
                   </p>
                 </div>
                 <div class="account-detail__row">
                   <p class="account-detail__dn">Group</p>
-                  <p class="account-detail__tn">{{ getUser.group.name }}</p>
+                  <p class="account-detail__tn">{{ user.group.name }}</p>
                 </div>
               </div>
             </div>
             <div class="account-right"></div>
           </div>
-        </div>
-      </div>
-      <div v-else class="card">
-        <div class="card-header">
-          <h3 class="mb-0">User not found 😥</h3>
         </div>
       </div>
     </div>
@@ -61,20 +53,30 @@ export default {
   },
   data() {
     return {
-      userId: this.$route.params.id
+      user: null
     };
   },
   methods: {
-    ...mapMutations(['setShowLoading', 'setUser']),
+    ...mapMutations(['setShowLoading']),
     ...mapActions(['fetchUser']),
-    async showUer() {
-      const response = await this.fetchUser(this.userId);
-      const user = response.data.data.user;
-      this.setUser(user);
+    async showUser() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchUser(this.$route.params.id);
+        this.user = response.data.data.user;
+        this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     }
   },
   created() {
-    this.showUer();
+    this.showUser();
   }
 };
 </script>

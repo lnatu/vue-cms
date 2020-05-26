@@ -39,15 +39,7 @@ const mutations = {
 
 const actions = {
   async fetchUsers({ commit }, payload) {
-    // Do stuff
-    try {
-      commit('setShowLoading', true);
-      const res = await axios.get(`/api/v1/users`, { params: payload });
-      return res.data;
-    } catch (err) {
-      console.log(err.response);
-      commit('setShowLoading', false);
-    }
+    return await axios.get(`/api/v1/users`, { params: payload });
   },
   async fetchCustomers({ commit }) {
     try {

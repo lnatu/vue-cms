@@ -121,8 +121,12 @@
                         </tr>
                       </thead>
                       <tbody>
+                        <tr v-if="!products">
+                          <td colspan="8">No data</td>
+                        </tr>
                         <tr
-                          v-for="(product, index) in getAllProducts"
+                          v-else
+                          v-for="(product, index) in products"
                           :key="product._id"
                         >
                           <th scope="row">{{ index + 1 }}</th>
@@ -177,94 +181,6 @@
               </button>
             </div>
           </div>
-
-          <div v-else class="account">
-            <div class="account-form">
-              <form action="">
-                <div class="form-group row">
-                  <div class="col-6">
-                    <label for="birthday">Birthday</label>
-                    <input
-                      id="birthday"
-                      class="form-control"
-                      type="text"
-                      name="birthday"
-                      placeholder="Birthday"
-                    />
-                  </div>
-                  <div class="col-6">
-                    <label for="addressLine">Address line</label>
-                    <input
-                      id="addressLine"
-                      class="form-control"
-                      type="text"
-                      name="addressLine"
-                      placeholder="Address line"
-                    />
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-6">
-                    <label for="mobile">Mobile</label>
-                    <input
-                      id="mobile"
-                      class="form-control"
-                      type="text"
-                      name="mobile"
-                      placeholder="Mobile"
-                    />
-                  </div>
-                  <div class="col-6">
-                    <label for="city">City</label>
-                    <select name="city" id="city" class="form-control">
-                      <option value="1">Admin</option>
-                      <option value="2">User</option>
-                      <option value="3">Staff</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="col-6">
-                    <label class="d-block" for="">Gender</label>
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="gender"
-                        id="male"
-                        value="male"
-                      />
-                      <label class="form-check-label" for="male">Male</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input
-                        class="form-check-input"
-                        type="radio"
-                        name="gender"
-                        id="female"
-                        value="female"
-                      />
-                      <label class="form-check-label" for="female"
-                        >Female</label
-                      >
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <label for="country">Country</label>
-                    <select name="country" id="country" class="form-control">
-                      <option value="1">Admin</option>
-                      <option value="2">User</option>
-                      <option value="3">Staff</option>
-                    </select>
-                  </div>
-                </div>
-              </form>
-            </div>
-            <div class="save-changes float-right">
-              <button class="btn btn-primary">Save changes</button>
-              <button class="btn btn-outline-danger ml-2">Reset</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -287,6 +203,7 @@ export default {
   data() {
     return {
       tabShow: true,
+      products: null,
       orderDetail: {},
       total: 0,
       creatorName: '',
@@ -337,6 +254,21 @@ export default {
       this.order.customer = customers[0]._id;
       this.setCustomers(customers);
     },
+    async showProducts() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchAllProducts();
+        this.products = response.data.data.products;
+        this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
+    },
     async createOrderDetailAction() {
       this.setShowLoading(true);
       let orderDetailItem = [];
@@ -384,7 +316,7 @@ export default {
   },
   created() {
     this.showCustomers();
-    this.fetchAllProducts();
+    this.showProducts();
     this.order.createdBy = this.getAuthUser._id;
     this.creatorName = `${this.getAuthUser.firstName} ${this.getAuthUser.lastName}`;
   }

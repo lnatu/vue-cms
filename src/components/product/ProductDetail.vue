@@ -3,7 +3,7 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <div v-if="getProduct">
+          <div v-if="product">
             <figure>
               <img
                 class="img-fluid"
@@ -12,29 +12,29 @@
               />
             </figure>
             <p>
-              <span><strong>SKU:</strong></span> {{ getProduct.sku }}
+              <span><strong>SKU:</strong></span> {{ product.sku }}
             </p>
             <p>
-              <span><strong>Name:</strong></span> {{ getProduct.name }}
+              <span><strong>Name:</strong></span> {{ product.name }}
             </p>
             <p>
               <span><strong>Price:</strong></span>
-              <span class="ml-1 text-success">$ {{ getProduct.price }}</span>
+              <span class="ml-1 text-success">$ {{ product.price }}</span>
             </p>
             <p>
               <span><strong>Category:</strong></span>
-              {{ getProduct.category.name }}
+              {{ product.category.name }}
             </p>
             <p>
               <span><strong>Supplier:</strong></span>
-              {{ getProduct.supplier.name }}
+              {{ product.supplier.name }}
             </p>
             <p>
-              <span><strong>In stock:</strong></span> {{ getProduct.quantity }}
+              <span><strong>In stock:</strong></span> {{ product.quantity }}
             </p>
             <p class="mb-0">
               <span><strong>Description:</strong></span>
-              {{ getProduct.description }}
+              {{ product.description }}
             </p>
           </div>
           <div v-else>
@@ -47,18 +47,36 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'ProductDetail',
-  computed: {
-    ...mapGetters(['getProduct'])
+  data() {
+    return {
+      product: null
+    }
   },
   methods: {
-    ...mapActions(['fetchProduct'])
+    ...mapMutations(['setShowLoading']),
+    ...mapActions(['fetchProduct']),
+    async showProduct() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchProduct(this.$route.params.id);
+        this.product = response.data.data.product;
+        this.setShowLoading(false);
+      } catch (err) {
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+        this.setShowLoading(false);
+      }
+    }
   },
   created() {
-    this.fetchProduct(this.$route.params.id);
+    this.showProduct();
   }
 };
 </script>

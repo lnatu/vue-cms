@@ -4,17 +4,27 @@ const catchError = require('./../utils/catchError');
 const CategoryModel = require('./../models/CategoryModel');
 
 exports.getAllCategories = catchError(async (req, res, next) => {
-  const features = new APIFeatures(CategoryModel.find(), req.query)
+  let searchObj = {};
+  if (req.query.search) {
+    searchObj = { $text: { $search: req.query.search } };
+  }
+  const features = new APIFeatures(CategoryModel.find(searchObj), req.query)
     .filter()
     .sort()
     .limitFields()
     .paginate();
 
   const categories = await features.query;
+  let searchCount = features.count();
+  if (req.query.search) {
+    searchCount = searchObj;
+  }
+  const pages = await CategoryModel.find(searchCount).count();
 
   res.status(200).json({
     status: 'success',
     results: categories.length,
+    pages,
     data: {
       categories
     }

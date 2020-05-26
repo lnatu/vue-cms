@@ -1,20 +1,8 @@
 <template>
   <div class="col-12">
     <div class="card">
-      <div class="card-header pt-0 pb-0 border-bottom-0">
-        <ul class="account-tab list-unstyled d-flex m-0">
-          <li @click="tabToggle" :class="{ active: tabShow }">
-            <i class="fas fa-user"></i>
-            <span class="ml-2">Category</span>
-          </li>
-          <li @click="tabToggle" :class="{ active: !tabShow }">
-            <i class="fas fa-info"></i>
-            <span class="ml-2">Information</span>
-          </li>
-        </ul>
-      </div>
       <div class="card-body">
-        <div v-if="tabShow" class="account clearfix">
+        <div class="account">
           <div class="account-top d-flex">
             <img
               class="account-picture"
@@ -22,7 +10,7 @@
               alt=""
             />
             <div class="account-action">
-              <h3 class="account-name">That Name Huh</h3>
+              <h3 class="account-name">That Name</h3>
               <div class="action">
                 <button class="btn btn-success">Change avatar</button>
                 <button class="btn btn-outline-danger ml-3">
@@ -37,104 +25,32 @@
                 <div class="col-6">
                   <label for="name">Name</label>
                   <input
+                    v-model="category.name"
+                    @input="$v.category.name.$touch()"
                     id="name"
                     class="form-control"
                     type="text"
                     name="name"
                     placeholder="Name"
                   />
+                  <div v-if="$v.category.name.$error">
+                    <span v-if="!$v.category.name.required" class="text-danger">
+                      Category name is required
+                    </span>
+                  </div>
                 </div>
               </div>
             </form>
           </div>
           <div class="save-changes float-right">
-            <button class="btn btn-primary">Save changes</button>
-            <button class="btn btn-outline-danger ml-2">Reset</button>
-          </div>
-        </div>
-
-        <div v-else class="account">
-          <div class="account-form">
-            <form action="">
-              <div class="form-group row">
-                <div class="col-6">
-                  <label for="birthday">Birthday</label>
-                  <input
-                    id="birthday"
-                    class="form-control"
-                    type="text"
-                    name="birthday"
-                    placeholder="Birthday"
-                  />
-                </div>
-                <div class="col-6">
-                  <label for="addressLine">Address line</label>
-                  <input
-                    id="addressLine"
-                    class="form-control"
-                    type="text"
-                    name="addressLine"
-                    placeholder="Address line"
-                  />
-                </div>
-              </div>
-              <div class="form-group row">
-                <div class="col-6">
-                  <label for="mobile">Mobile</label>
-                  <input
-                    id="mobile"
-                    class="form-control"
-                    type="text"
-                    name="mobile"
-                    placeholder="Mobile"
-                  />
-                </div>
-                <div class="col-6">
-                  <label for="city">City</label>
-                  <select name="city" id="city" class="form-control">
-                    <option value="1">Admin</option>
-                    <option value="2">User</option>
-                    <option value="3">Staff</option>
-                  </select>
-                </div>
-              </div>
-              <div class="form-group row">
-                <div class="col-6">
-                  <label class="d-block" for="">Gender</label>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="gender"
-                      id="male"
-                      value="male"
-                    />
-                    <label class="form-check-label" for="male">Male</label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="radio"
-                      name="gender"
-                      id="female"
-                      value="female"
-                    />
-                    <label class="form-check-label" for="female">Female</label>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <label for="country">Country</label>
-                  <select name="country" id="country" class="form-control">
-                    <option value="1">Admin</option>
-                    <option value="2">User</option>
-                    <option value="3">Staff</option>
-                  </select>
-                </div>
-              </div>
-            </form>
-          </div>
-          <div class="save-changes float-right">
-            <button class="btn btn-primary">Save changes</button>
+            <button
+              @click="createCategoryAction(category)"
+              type="button"
+              class="btn btn-primary"
+              :disabled="isFormValid"
+            >
+              Save changes
+            </button>
             <button class="btn btn-outline-danger ml-2">Reset</button>
           </div>
         </div>
@@ -144,16 +60,46 @@
 </template>
 
 <script>
+import { email, minLength, required, sameAs } from 'vuelidate/lib/validators';
+import { mapMutations, mapActions } from 'vuex';
+
 export default {
   name: 'CategoryCreate',
+  computed: {
+    isFormValid() {
+      return this.$v.category.$invalid;
+    }
+  },
   data() {
     return {
-      tabShow: true
+      category: {
+        name: ''
+      }
     };
   },
+  validations: {
+    category: {
+      name: {
+        required
+      }
+    }
+  },
   methods: {
-    tabToggle() {
-      this.tabShow = !this.tabShow;
+    ...mapMutations(['setShowLoading']),
+    ...mapActions(['createCategory']),
+    async createCategoryAction() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.createCategory(this.category);
+        this.$router.push({ name: 'categoryList' });
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     }
   }
 };

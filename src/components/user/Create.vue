@@ -295,6 +295,7 @@
 <script>
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators';
 import { mapGetters, mapMutations, mapActions } from 'vuex';
+
 export default {
   name: 'UserCreate',
   computed: {

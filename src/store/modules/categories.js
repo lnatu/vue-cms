@@ -24,12 +24,11 @@ const mutations = {
 };
 
 const actions = {
-  async fetchAllCategories() {
-    try {
-      return await axios.get('/api/v1/categories');
-    } catch (err) {
-      console.log(err.response);
-    }
+  async fetchAllCategories({ commit }, params) {
+    return await axios.get('/api/v1/categories', { params });
+  },
+  async createCategory({ commit }, payload) {
+    return await axios.post('/api/v1/categories', payload);
   }
 };
 

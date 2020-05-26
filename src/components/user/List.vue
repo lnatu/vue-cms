@@ -28,12 +28,12 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="getAllUsers.length === 0">
+            <tr v-if="!users">
               <td colspan="5" class="text-bold">No data</td>
             </tr>
             <tr
               v-else
-              v-for="(user, index) in getAllUsers"
+              v-for="(user, index) in users"
               :key="index"
               :class="{ 'bg-dark': getUpdatedUserId === user._id }"
             >
@@ -111,6 +111,7 @@ export default {
   name: 'UserList',
   data() {
     return {
+      users: null,
       pages: 0,
       seachString: '',
       filter: {
@@ -144,16 +145,22 @@ export default {
         });
       }
     },
-    showData() {
-      const query = this.$route.query;
-      const _this = this;
-      this.fetchUsers(query).then(res => {
-        this.setAllUsers(res.data.users);
-        if (res.results > 0) {
-          _this.pages = Math.ceil(res.pages / parseInt(query.limit));
-        }
+    async showData() {
+      this.setShowLoading(true);
+      try {
+        const query = this.$route.query;
+        const response = await this.fetchUsers(query);
+        this.users = response.data.data.users;
+        this.pages = Math.ceil(response.data.pages / parseInt(query.limit));
         this.setShowLoading(false);
-      });
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     },
     searchThat() {
       let query = { ...this.$route.query, search: this.seachString };
