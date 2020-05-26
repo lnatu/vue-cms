@@ -24,26 +24,20 @@ const mutations = {
 };
 
 const actions = {
-  async fetchAllProducts() {
-    return await axios.get('/api/v1/products');
+  async fetchAllProducts({ commit }, params) {
+    return await axios.get('/api/v1/products', { params });
   },
   async fetchProduct({ commit }, payload) {
-    commit('setShowLoading', true);
-    try {
-      const response = await axios.get(`/api/v1/products/${payload}`);
-      const product = response.data.data.product;
-      commit('setProduct', product);
-      commit('setShowLoading', false);
-    } catch (err) {
-      console.log(err.response);
-      commit('setShowLoading', false);
-    }
+    return await axios.get(`/api/v1/products/${payload}`);
   },
   async createProduct({ commit }, payload) {
     return await axios.post('/api/v1/products', payload);
   },
   async deleteProduct({ commit }, payload) {
     return await axios.delete(`/api/v1/products/${payload}`);
+  },
+  async updateProduct({ commit }, { id, product }) {
+    return await axios.patch(`/api/v1/products/${id}`, product);
   }
 };
 

@@ -2,9 +2,23 @@
   <div class="row">
     <div class="col-12">
       <div class="bg-white p-3 rounded overflow-hidden">
-        <div class="search-list">
-          <div class="form-group w-25">
-            <input type="text" class="form-control" placeholder="Search..." />
+        <div class="search-list clearfix">
+          <div class="form-group w-25 float-left">
+            <input
+              v-model="searchString"
+              type="text"
+              class="form-control"
+              placeholder="Search..."
+            />
+          </div>
+          <div class="form-group w-25 float-left ml-3">
+            <button
+              @click="performSearch"
+              type="button"
+              class="btn btn-primary"
+            >
+              Search
+            </button>
           </div>
         </div>
         <table class="table table-bordered table-hover mb-0">
@@ -112,10 +126,16 @@ export default {
   methods: {
     ...mapMutations(['setShowLoading', 'setAllProducts']),
     ...mapActions(['fetchAllProducts', 'deleteProduct']),
+    performSearch() {
+      if (this.searchString) {
+        let query = { ...this.$route.query, search: this.searchString };
+        this.$router.push({ name: 'productList', query });
+      }
+    },
     async showAllProducts() {
       this.setShowLoading(true);
       try {
-        const response = await this.fetchAllProducts();
+        const response = await this.fetchAllProducts(this.$route.query);
         const products = response.data.data.products;
         this.pages = Math.ceil(
           response.data.pages / parseInt(this.$route.query.limit)
