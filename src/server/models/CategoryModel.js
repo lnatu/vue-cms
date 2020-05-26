@@ -27,6 +27,8 @@ const categorySchema = new mongoose.Schema({
   }
 });
 
+categorySchema.index({ '$**': 'text' });
+
 categorySchema.pre(/^find/, function(next) {
   this.find({ isActive: { $ne: false } });
   next();

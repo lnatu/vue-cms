@@ -27,8 +27,17 @@ const actions = {
   async fetchAllCategories({ commit }, params) {
     return await axios.get('/api/v1/categories', { params });
   },
+  async fetchCategory({ commit }, payload) {
+    return await axios.get(`/api/v1/categories/${payload}`);
+  },
   async createCategory({ commit }, payload) {
     return await axios.post('/api/v1/categories', payload);
+  },
+  async updateCategory({ commit }, { id, category }) {
+    return await axios.patch(`/api/v1/categories/${id}`, category);
+  },
+  async deleteCategory({ commit }, payload) {
+    return await axios.delete(`/api/v1/categories/${payload}`);
   }
 };
 

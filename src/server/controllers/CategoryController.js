@@ -84,14 +84,9 @@ exports.updateCategory = catchError(async (req, res, next) => {
 });
 
 exports.deleteCategory = catchError(async (req, res, next) => {
-  const category = await CategoryModel.findByIdAndUpdate(
-    req.params.id,
-    { isActive: false },
-    {
-      new: true,
-      runValidators: true
-    }
-  );
+  const category = await CategoryModel.findByIdAndUpdate(req.params.id, {
+    isActive: false
+  });
 
   if (!category) {
     return next(

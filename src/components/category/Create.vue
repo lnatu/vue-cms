@@ -1,57 +1,62 @@
 <template>
-  <div class="col-12">
-    <div class="card">
-      <div class="card-body">
-        <div class="account">
-          <div class="account-top d-flex">
-            <img
-              class="account-picture"
-              src="../../assets/img/avatar5.png"
-              alt=""
-            />
-            <div class="account-action">
-              <h3 class="account-name">That Name</h3>
-              <div class="action">
-                <button class="btn btn-success">Change avatar</button>
-                <button class="btn btn-outline-danger ml-3">
-                  Remove avatar
-                </button>
-              </div>
-            </div>
-          </div>
-          <div class="account-form mt-4">
-            <form action="">
-              <div class="form-group row">
-                <div class="col-6">
-                  <label for="name">Name</label>
-                  <input
-                    v-model="category.name"
-                    @input="$v.category.name.$touch()"
-                    id="name"
-                    class="form-control"
-                    type="text"
-                    name="name"
-                    placeholder="Name"
-                  />
-                  <div v-if="$v.category.name.$error">
-                    <span v-if="!$v.category.name.required" class="text-danger">
-                      Category name is required
-                    </span>
-                  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="account">
+            <div class="account-top d-flex">
+              <img
+                class="account-picture"
+                src="../../assets/img/avatar5.png"
+                alt=""
+              />
+              <div class="account-action">
+                <h3 class="account-name">That Name</h3>
+                <div class="action">
+                  <button class="btn btn-success">Change avatar</button>
+                  <button class="btn btn-outline-danger ml-3">
+                    Remove avatar
+                  </button>
                 </div>
               </div>
-            </form>
-          </div>
-          <div class="save-changes float-right">
-            <button
-              @click="createCategoryAction(category)"
-              type="button"
-              class="btn btn-primary"
-              :disabled="isFormValid"
-            >
-              Save changes
-            </button>
-            <button class="btn btn-outline-danger ml-2">Reset</button>
+            </div>
+            <div class="account-form mt-4">
+              <form action="">
+                <div class="form-group row">
+                  <div class="col-6">
+                    <label for="name">Name</label>
+                    <input
+                      v-model="category.name"
+                      @input="$v.category.name.$touch()"
+                      id="name"
+                      class="form-control"
+                      type="text"
+                      name="name"
+                      placeholder="Name"
+                    />
+                    <div v-if="$v.category.name.$error">
+                      <span
+                        v-if="!$v.category.name.required"
+                        class="text-danger"
+                      >
+                        Category name is required
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="save-changes float-right">
+              <button
+                @click="createCategoryAction(category)"
+                type="button"
+                class="btn btn-primary"
+                :disabled="isFormValid"
+              >
+                Save changes
+              </button>
+              <button class="btn btn-outline-danger ml-2">Reset</button>
+            </div>
           </div>
         </div>
       </div>
@@ -91,7 +96,10 @@ export default {
       this.setShowLoading(true);
       try {
         const response = await this.createCategory(this.category);
-        this.$router.push({ name: 'categoryList' });
+        this.$router.push({
+          name: 'categoryList',
+          query: { page: 1, limit: 20 }
+        });
       } catch (err) {
         this.setShowLoading(false);
         this.$toasted.show(err.response.data.message, {

@@ -24,6 +24,7 @@ import ProductEdit from '@/components/product/Edit';
 import CategoryStart from '@/components/category/Start';
 import CategoryList from '@/components/category/List';
 import CategoryCreate from '@/components/category/Create';
+import CategoryEdit from '@/components/category/Edit';
 // Import order
 import OrderStart from '@/components/order/OrderStart';
 import OrderList from '@/components/order/OrderList';
@@ -140,6 +141,11 @@ export const routes = [
         path: 'create',
         component: CategoryCreate,
         name: 'categoryCreate'
+      },
+      {
+        path: 'edit/:id',
+        component: CategoryEdit,
+        name: 'categoryEdit'
       }
     ]
   },

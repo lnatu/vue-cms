@@ -4,10 +4,21 @@
       <div class="bg-white p-3 rounded overflow-hidden">
         <div class="search-list clearfix">
           <div class="form-group w-25 float-left">
-            <input type="text" class="form-control" placeholder="Search..." />
+            <input
+              v-model="searchString"
+              type="text"
+              class="form-control"
+              placeholder="Search..."
+            />
           </div>
           <div class="form-group w-25 float-left ml-3">
-            <button type="button" class="btn btn-primary">Search</button>
+            <button
+              @click="performSearch"
+              type="button"
+              class="btn btn-primary"
+            >
+              Search
+            </button>
           </div>
         </div>
         <table class="table table-bordered table-hover mb-0">
@@ -26,7 +37,11 @@
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ category.name }}</td>
               <td>
-                <a class="text-danger" href="#">
+                <a
+                  @click.prevent="deleteCategoryAction(category)"
+                  class="text-danger"
+                  href="#"
+                >
                   <i class="fas fa-recycle"></i>
                 </a>
                 <router-link
@@ -77,13 +92,14 @@ export default {
   name: 'CategoryList',
   data() {
     return {
+      searchString: '',
       categories: null,
       pages: 0
     };
   },
   methods: {
     ...mapMutations(['setShowLoading']),
-    ...mapActions(['fetchAllCategories']),
+    ...mapActions(['fetchAllCategories', 'deleteCategory']),
     async showCategories() {
       this.setShowLoading(true);
       try {
@@ -99,6 +115,34 @@ export default {
           theme: 'bubble',
           position: 'bottom-right',
           duration: 5000
+        });
+      }
+    },
+    async deleteCategoryAction(category) {
+      this.setShowLoading(true);
+      try {
+        await this.deleteCategory(category._id);
+        this.showCategories();
+        this.$toasted.show(`${category.name} deleted`, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
+    },
+    performSearch() {
+      if (this.searchString) {
+        const query = { ...this.$route.query, search: this.searchString };
+        this.$router.push({
+          name: 'categoryList',
+          query
         });
       }
     }

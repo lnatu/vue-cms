@@ -44,7 +44,12 @@
               <td>{{ product.name }}</td>
               <td>{{ product.quantity }}</td>
               <td>{{ product.price }}</td>
-              <td>{{ product.category.name }}</td>
+              <td v-if="product.category">{{ product.category.name }}</td>
+              <td v-else>
+                <span style="font-size: 16px;" class="badge badge-danger">
+                  No category found
+                </span>
+              </td>
               <td>
                 <router-link
                   :to="{
