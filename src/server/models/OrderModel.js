@@ -53,6 +53,8 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
+orderSchema.index({ '$**': 'text' });
+
 orderSchema.virtual('totalPrice').get(function() {
   let total = 0;
   this.orderDetail.forEach(order => {

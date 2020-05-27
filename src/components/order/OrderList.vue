@@ -22,10 +22,10 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-if="getAllOrders.length === 0">
+            <tr v-if="!orders">
               <td colspan="9">No data</td>
             </tr>
-            <tr v-else v-for="(order, index) in getAllOrders" :key="order.id">
+            <tr v-else v-for="(order, index) in orders" :key="order.id">
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ order._id }}</td>
               <td>
@@ -53,9 +53,11 @@
               <td>{{ new Date(order.shipDate).toLocaleDateString() }}</td>
               <td class="text-success text-bold">$ {{ order.totalPrice }}</td>
               <td>
-                <span :class="showStatus(order.status)" style="font-size: 18px;">{{
-                  order.status
-                }}</span>
+                <span
+                  :class="showStatus(order.status)"
+                  style="font-size: 18px;"
+                  >{{ order.status }}</span
+                >
               </td>
               <td>{{ new Date(order.createdAt).toLocaleDateString() }}</td>
               <td>
@@ -64,17 +66,55 @@
                 >
                   <i class="fas fa-eye"></i>
                 </router-link>
+                <a
+                  class="text-danger ml-4"
+                  href="#"
+                >
+                  <i class="fas fa-recycle"></i>
+                </a>
+                <router-link
+                  class="ml-4 text-warning"
+                  :to="{ name: 'orderEdit', params: { id: order._id } }"
+                >
+                  <i class="fas fa-user-edit"></i>
+                </router-link>
               </td>
             </tr>
           </tbody>
         </table>
+        <nav v-if="pages > 0" aria-label="Page navigation example">
+          <ul class="pagination mt-5">
+            <li class="page-item">
+              <a class="page-link" href="#">Previous</a>
+            </li>
+            <router-link
+              v-for="page in pages"
+              :key="page"
+              :to="{
+                name: 'orderList',
+                query: {
+                  page,
+                  limit: $route.query.limit,
+                  search: $route.query.search
+                }
+              }"
+              active-class="active"
+              exact
+              tag="li"
+              class="page-item"
+            >
+              <a class="page-link">{{ page }}</a>
+            </router-link>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+          </ul>
+        </nav>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'OrderList',
@@ -83,10 +123,13 @@ export default {
   },
   data() {
     return {
+      orders: null,
+      pages: 0,
       status: ['order success', 'packing', 'on delivery', 'delivery successful']
     };
   },
   methods: {
+    ...mapMutations(['setShowLoading']),
     ...mapActions(['fetchAllOrders']),
     showStatus(status) {
       let statusCode = '';
@@ -107,10 +150,33 @@ export default {
           statusCode = 'badge badge-primary';
       }
       return statusCode;
+    },
+    async showOrders() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchAllOrders(this.$route.query);
+        this.pages = Math.ceil(
+          response.data.pages / parseInt(this.$route.query.limit)
+        );
+        this.orders = response.data.data.orders;
+        this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
     }
   },
   created() {
-    this.fetchAllOrders();
+    this.showOrders();
+  },
+  watch: {
+    $route() {
+      this.showOrders();
+    }
   }
 };
 </script>

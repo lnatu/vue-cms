@@ -4,17 +4,28 @@ const catchError = require('./../utils/catchError');
 const OrderModel = require('./../models/OrderModel');
 
 exports.getAllOrders = catchError(async (req, res, next) => {
-  const features = new APIFeatures(OrderModel.find(), req.query)
+  let searchObj = {};
+  if (req.query.search) {
+    searchObj = { $text: { $search: req.query.search } };
+  }
+
+  const features = new APIFeatures(OrderModel.find(searchObj), req.query)
     .filter()
     .sort()
     .limitFields()
     .paginate();
 
   const orders = await features.query;
+  let searchCount = features.count();
+  if (req.query.search) {
+    searchCount = searchObj;
+  }
+  const pages = await OrderModel.find(searchCount).count();
 
   res.status(200).json({
     status: 'success',
     results: orders.length,
+    pages,
     data: {
       orders
     }

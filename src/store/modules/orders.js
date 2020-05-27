@@ -24,17 +24,8 @@ const mutations = {
 };
 
 const actions = {
-  async fetchAllOrders({ commit }) {
-    commit('setShowLoading', true);
-    try {
-      const response = await axios.get('/api/v1/orders');
-      const orders = response.data.data.orders;
-      commit('setAllOrders', orders);
-      commit('setShowLoading', false);
-    } catch (err) {
-      console.log(err.response);
-      commit('setShowLoading', false);
-    }
+  async fetchAllOrders({ commit }, params) {
+    return await axios.get('/api/v1/orders', { params });
   },
   async fetchOrder({ commit }, payload) {
     commit('setShowLoading', true);
