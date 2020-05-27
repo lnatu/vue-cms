@@ -14,7 +14,7 @@ router
 router
   .route('/:id')
   .get(OrderController.getOrder)
-  .patch(OrderController.updateOrder)
-  .delete(OrderController.deleteOrder);
+  .patch(AuthController.restrictTo('admin'), OrderController.updateOrder)
+  .delete(AuthController.restrictTo('admin'), OrderController.deleteOrder);
 
 module.exports = router;

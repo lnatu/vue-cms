@@ -81,6 +81,11 @@ orderSchema.pre(/^find/, function(next) {
   next();
 });
 
+orderSchema.pre(/^find.*(?<!Update)$/, function(next) {
+  this.find({ isActive: { $ne: false } });
+  next();
+});
+
 const OrderModel = mongoose.model('Order', orderSchema);
 
 module.exports = OrderModel;

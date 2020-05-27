@@ -67,6 +67,7 @@
                   <i class="fas fa-eye"></i>
                 </router-link>
                 <a
+                  @click.prevent="deleteOrderAction(order)"
                   class="text-danger ml-4"
                   href="#"
                 >
@@ -130,7 +131,7 @@ export default {
   },
   methods: {
     ...mapMutations(['setShowLoading']),
-    ...mapActions(['fetchAllOrders']),
+    ...mapActions(['fetchAllOrders', 'deleteOrder']),
     showStatus(status) {
       let statusCode = '';
       switch (status) {
@@ -160,6 +161,28 @@ export default {
         );
         this.orders = response.data.data.orders;
         this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
+    },
+    async deleteOrderAction(order) {
+      this.setShowLoading(true);
+      try {
+        await this.deleteOrder(order._id);
+        this.showOrders();
+        this.$toasted.show(
+          `Order ${order._id} created by ${order.createdBy.firstName} ${order.createdBy.lastName} has been deleted`,
+          {
+            theme: 'bubble',
+            position: 'bottom-right',
+            duration: 5000
+          }
+        );
       } catch (err) {
         this.setShowLoading(false);
         this.$toasted.show(err.response.data.message, {
