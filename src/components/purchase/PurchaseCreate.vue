@@ -86,7 +86,14 @@
                 >
                   <th scope="row">{{ index + 1 }}</th>
                   <td>{{ product.sku }}</td>
-                  <td>{{ product.name }}</td>
+                  <td>
+                    <span
+                      style="font-size: 18px;"
+                      :class="{ 'badge badge-danger': product.quantity <= 0 }"
+                    >
+                      {{ product.name }}
+                    </span>
+                  </td>
                   <td>{{ product.price }}</td>
                   <td>{{ product.category.name }}</td>
                   <td>
