@@ -38,6 +38,9 @@ const actions = {
   },
   async updateProduct({ commit }, { id, product }) {
     return await axios.patch(`/api/v1/products/${id}`, product);
+  },
+  async updateProductQuantity({ commit }, { id, quantity }) {
+    return await axios.patch(`/api/v1/products/updateQuantity/${id}`, { quantity });
   }
 };
 

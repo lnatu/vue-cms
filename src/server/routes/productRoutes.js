@@ -6,6 +6,8 @@ const router = express.Router();
 
 router.use(AuthController.protect);
 
+router.route('/updateQuantity/:id').patch(ProductController.updateQuantity);
+
 router
   .route('/')
   .get(ProductController.getAllProducts)

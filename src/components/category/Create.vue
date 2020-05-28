@@ -5,20 +5,7 @@
         <div class="card-body">
           <div class="account">
             <div class="account-top d-flex">
-              <img
-                class="account-picture"
-                src="../../assets/img/avatar5.png"
-                alt=""
-              />
-              <div class="account-action">
-                <h3 class="account-name">That Name</h3>
-                <div class="action">
-                  <button class="btn btn-success">Change avatar</button>
-                  <button class="btn btn-outline-danger ml-3">
-                    Remove avatar
-                  </button>
-                </div>
-              </div>
+              <h3>Create category</h3>
             </div>
             <div class="account-form mt-4">
               <form action="">

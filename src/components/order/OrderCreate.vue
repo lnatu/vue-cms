@@ -16,22 +16,6 @@
         </div>
         <div class="card-body">
           <div v-if="tabShow" class="account clearfix">
-            <div class="account-top d-flex">
-              <img
-                class="account-picture"
-                src="../../assets/img/avatar5.png"
-                alt=""
-              />
-              <div class="account-action">
-                <h3 class="account-name">That Name Huh</h3>
-                <div class="action">
-                  <button class="btn btn-success">Change avatar</button>
-                  <button class="btn btn-outline-danger ml-3">
-                    Remove avatar
-                  </button>
-                </div>
-              </div>
-            </div>
             <div class="account-form mt-4">
               <form action="">
                 <div class="form-group row">
@@ -132,7 +116,22 @@
                           <th scope="row">{{ index + 1 }}</th>
                           <td>{{ product.sku }}</td>
                           <td>{{ product.name }}</td>
-                          <td>{{ product.quantity }}</td>
+                          <td>
+                            <span
+                              style="font-size: 17px"
+                              :class="{
+                                'badge badge-danger': 0 >= product.quantity
+                              }"
+                            >
+                              {{
+                                `${
+                                  0 >= product.quantity
+                                    ? 'out of stock'
+                                    : product.quantity
+                                }`
+                              }}
+                            </span>
+                          </td>
                           <td>{{ product.price }}</td>
                           <td>{{ product.category.name }}</td>
                           <td>
@@ -148,6 +147,7 @@
                           <td>
                             <button
                               type="button"
+                              :disabled="0 >= product.quantity"
                               @click.prevent="
                                 addOrderDetail(
                                   product._id,
@@ -207,6 +207,7 @@ export default {
       orderDetail: {},
       total: 0,
       creatorName: '',
+      orderQuantity: [],
       order: {
         createdBy: '',
         customer: '',
@@ -222,7 +223,8 @@ export default {
       'createOrder',
       'fetchAllProducts',
       'fetchCustomers',
-      'fetchUsers'
+      'fetchUsers',
+      'updateProductQuantity'
     ]),
     resetOrder() {
       this.orderDetail = {};
@@ -277,6 +279,7 @@ export default {
         orderDetailItem.push(
           this.createOrderDetail({ product: productId, quantity })
         );
+        this.orderQuantity.push({ product: productId, quantity });
       }
 
       try {
@@ -299,6 +302,13 @@ export default {
         } else {
           const orderResponse = await this.createOrder(this.order);
           const orderId = orderResponse.data.data.order._id;
+          const awaitQuantity = this.orderQuantity.map(
+            async item =>
+              await this.updateProductQuantity({
+                id: item.product,
+                quantity: -item.quantity
+              })
+          );
           this.$router.push({ name: 'orderDetail', params: { id: orderId } });
         }
       } catch (err) {

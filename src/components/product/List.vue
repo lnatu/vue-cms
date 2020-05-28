@@ -42,7 +42,20 @@
               <th scope="row">{{ index + 1 }}</th>
               <td>{{ product.sku }}</td>
               <td>{{ product.name }}</td>
-              <td>{{ product.quantity }}</td>
+              <td>
+                <span
+                  style="font-size: 17px"
+                  :class="{
+                    'badge badge-danger': 0 >= product.quantity
+                  }"
+                >
+                  {{
+                    `${
+                      0 >= product.quantity ? 'out of stock' : product.quantity
+                    }`
+                  }}
+                </span>
+              </td>
               <td>{{ product.price }}</td>
               <td v-if="product.category">{{ product.category.name }}</td>
               <td v-else>

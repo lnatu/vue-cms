@@ -93,3 +93,24 @@ exports.deleteProduct = catchError(async (req, res, next) => {
     data: null
   });
 });
+
+exports.updateQuantity = async (req, res, next) => {
+  const product = await ProductModel.findByIdAndUpdate(
+    req.params.id,
+    {
+      $inc: { quantity: req.body.quantity }
+    },
+    {
+      new: true
+    }
+  );
+
+  if (!product) {
+    return next(new AppError(`No product found with id: ${req.params.id}`));
+  }
+
+  res.status(200).json({
+    status: 'success',
+    data: null
+  });
+};
