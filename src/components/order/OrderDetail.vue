@@ -3,33 +3,33 @@
     <div class="col-12">
       <div class="card">
         <div class="card-body">
-          <div v-if="getOrder">
+          <div v-if="order">
             <p>
-              <span><strong>Order ID:</strong></span> {{ getOrder._id }}
+              <span><strong>Order ID:</strong></span> {{ order._id }}
             </p>
             <p>
               <span><strong>Created date:</strong></span>
-              {{ new Date(getOrder.createdAt).toLocaleDateString() }}
+              {{ new Date(order.createdAt).toLocaleDateString() }}
             </p>
             <p>
               <span><strong>Created by:</strong></span>
               {{
-                `${getOrder.createdBy.firstName} ${getOrder.createdBy.lastName}`
+                `${order.createdBy.firstName} ${order.createdBy.lastName}`
               }}
             </p>
             <p>
               <span><strong>Ship date:</strong></span>
-              {{ new Date(getOrder.shipDate).toLocaleDateString() }}
+              {{ new Date(order.shipDate).toLocaleDateString() }}
             </p>
             <p>
               <span><strong>Customer:</strong></span>
               {{
-                `${getOrder.customer.firstName} ${getOrder.customer.lastName}`
+                `${order.customer.firstName} ${order.customer.lastName}`
               }}
             </p>
             <p>
               <span><strong>Total:</strong></span>
-              <span class="ml-1 text-success">$ {{ getOrder.totalPrice }}</span>
+              <span class="ml-1 text-success">$ {{ order.totalPrice }}</span>
             </p>
             <p><strong>Items</strong></p>
             <table class="table table-bordered table-hover mb-0">
@@ -45,7 +45,7 @@
               </tr>
               </thead>
               <tbody>
-              <tr v-for="(orderDetail, index) in getOrder.orderDetail" :key="orderDetail._id">
+              <tr v-for="(orderDetail, index) in order.orderDetail" :key="orderDetail._id">
                 <th scope="row">{{ index + 1 }}</th>
                 <td>{{ orderDetail.product.sku }}</td>
                 <td>{{ orderDetail.product.name }}</td>
@@ -76,18 +76,36 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'OrderDetail',
-  computed: {
-    ...mapGetters(['getOrder'])
+  data() {
+    return {
+      order: null
+    }
   },
   methods: {
-    ...mapActions(['fetchOrder'])
+    ...mapMutations(['setShowLoading']),
+    ...mapActions(['fetchOrder']),
+    async showOrder() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchOrder(this.$route.params.id);
+        this.order = response.data.data.order;
+        this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
+    }
   },
   created() {
-    this.fetchOrder(this.$route.params.id);
+    this.showOrder();
   }
 };
 </script>

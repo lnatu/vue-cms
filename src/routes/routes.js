@@ -30,10 +30,12 @@ import OrderStart from '@/components/order/OrderStart';
 import OrderList from '@/components/order/OrderList';
 import OrderCreate from '@/components/order/OrderCreate';
 import OrderDetail from '@/components/order/OrderDetail';
+import OrderEdit from '@/components/order/OrderEdit';
 // Import purchase
 import PurchaseStart from '@/components/purchase/PurchaseStart';
 import PurchaseList from '@/components/purchase/PurchaseList';
 import PurchaseCreate from '@/components/purchase/PurchaseCreate';
+import PurchaseDetail from '@/components/purchase/PurchaseDetail';
 // Import group
 import GroupStart from '@/components/group/GroupStart';
 import GroupList from '@/components/group/GroupList';
@@ -165,6 +167,11 @@ export const routes = [
         name: 'orderCreate'
       },
       {
+        path: 'edit/:id',
+        component: OrderEdit,
+        name: 'orderEdit'
+      },
+      {
         path: ':id',
         component: OrderDetail,
         name: 'orderDetail'
@@ -185,6 +192,11 @@ export const routes = [
         path: 'create',
         component: PurchaseCreate,
         name: 'purchaseCreate'
+      },
+      {
+        path: ':id',
+        component: PurchaseDetail,
+        name: 'purchaseDetail'
       }
     ]
   },

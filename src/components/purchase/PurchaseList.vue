@@ -1,99 +1,6 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <div class="card filter-room">
-        <div class="card-header filter-room__header">
-          <h5 class="mb-0">Filters</h5>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-3">
-              <p class="mb-0 text-filter">Role</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="roleFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="roleFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Admin</a>
-                  <a class="dropdown-item" href="#">User</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Status</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="statusFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="statusFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Active</a>
-                  <a class="dropdown-item" href="#">Deactivated</a>
-                  <a class="dropdown-item" href="#">Blocked</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Verified</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="verifyFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="verifyFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Yes</a>
-                  <a class="dropdown-item" href="#">No</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-3">
-              <p class="mb-0 text-filter">Department</p>
-              <div class="dropdown">
-                <button
-                  class="btn btn-secondary bg-transparent text-dark dropdown-toggle w-100 d-flex justify-content-between align-items-center"
-                  type="button"
-                  id="departmentFilter"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  All
-                </button>
-                <div class="dropdown-menu" aria-labelledby="departmentFilter">
-                  <a class="dropdown-item" href="#">All</a>
-                  <a class="dropdown-item" href="#">Sales</a>
-                  <a class="dropdown-item" href="#">Development</a>
-                  <a class="dropdown-item" href="#">Management</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-12">
       <div class="bg-white p-3 rounded overflow-hidden">
         <div class="search-list">
           <div class="form-group w-25">
@@ -104,45 +11,56 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Purchase ID</th>
+              <th scope="col">Created by</th>
+              <th scope="col">Created date</th>
+              <th scope="col">Total</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
-              <td>@mdo</td>
+            <tr v-if="!purchases">
+              <td colspan="6">No data</td>
             </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Larry the Bird</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
-              <td>@twitter</td>
+            <tr
+              v-else
+              v-for="(purchase, index) in purchases"
+              :key="purchase._id"
+            >
+              <th scope="row">{{ index + 1 }}</th>
+              <td>{{ purchase._id }}</td>
+              <td>
+                <router-link
+                  :to="{
+                    name: 'userDetail',
+                    params: { id: purchase.createdBy._id }
+                  }"
+                >
+                  {{
+                    `${purchase.createdBy.firstName} ${purchase.createdBy.lastName}`
+                  }}
+                </router-link>
+              </td>
+              <td>{{ new Date(purchase.createdAt).toLocaleDateString() }}</td>
+              <td>
+                <span class="text-success text-bold">$ {{ purchase.totalPrice }}</span>
+              </td>
+              <td>
+                <router-link
+                  :to="{ name: 'purchaseDetail', params: { id: purchase._id } }"
+                >
+                  <i class="fas fa-eye"></i>
+                </router-link>
+                <a class="text-danger ml-4" href="#">
+                  <i class="fas fa-recycle"></i>
+                </a>
+                <router-link
+                  class="ml-4 text-warning"
+                  :to="{ name: 'purchaseEdit', params: { id: purchase._id } }"
+                >
+                  <i class="fas fa-user-edit"></i>
+                </router-link>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -152,8 +70,39 @@
 </template>
 
 <script>
+import { mapMutations, mapActions } from 'vuex';
+
 export default {
-  name: 'PurchaseList'
+  name: 'PurchaseList',
+  data() {
+    return {
+      purchases: null,
+      searchString: '',
+      pages: 0
+    };
+  },
+  methods: {
+    ...mapMutations(['setShowLoading']),
+    ...mapActions(['fetchAllPurchases']),
+    async showAllPurchases() {
+      this.setShowLoading(true);
+      try {
+        const response = await this.fetchAllPurchases(this.$route.query);
+        this.purchases = response.data.data.purchases;
+        this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
+    }
+  },
+  created() {
+    this.showAllPurchases();
+  }
 };
 </script>
 

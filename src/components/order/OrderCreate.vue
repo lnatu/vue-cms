@@ -55,7 +55,7 @@
                       v-model="order.shipDate"
                       id="name"
                       class="form-control"
-                      type="text"
+                      type="date"
                       name="name"
                       placeholder="Name"
                     />
@@ -79,9 +79,16 @@
                         <span class="ml-2 mr-2">x</span>
                         <span>{{ order.quantity }}</span>
                         <span class="ml-2 mr-2">x</span>
-                        <span class="text-success text-bold"
-                          >$ {{ order.productPrice }}</span
+                        <span class="text-success text-bold">
+                          $ {{ order.productPrice }}
+                        </span>
+                        <span
+                          @click="removeOrderDetail(order.productId)"
+                          class="badge badge-danger float-right"
+                          style="font-size: 18px; cursor: pointer;"
                         >
+                          <i class="fas fa-trash-alt" />
+                        </span>
                       </li>
                     </ul>
                     <h3 v-if="total > 0" class="mb-4 float-right">
@@ -228,6 +235,10 @@ export default {
     ]),
     resetOrder() {
       this.orderDetail = {};
+    },
+    removeOrderDetail(id) {
+      this.$delete(this.orderDetail, id);
+      this.calcTotal();
     },
     addOrderDetail(productId, productName, productPrice, quantity) {
       if (this.orderDetail[productId]) {

@@ -42,12 +42,7 @@ const actions = {
     return await axios.get(`/api/v1/users`, { params: payload });
   },
   async fetchCustomers({ commit }) {
-    try {
-      return await axios.get('/api/v1/users/customers');
-    } catch (err) {
-      console.log(err.response);
-      commit('setShowLoading', false);
-    }
+    return await axios.get('/api/v1/users/customers');
   },
   async fetchUser({ commit }, payload) {
     return await axios.get(`/api/v1/users/${payload}`);

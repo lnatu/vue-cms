@@ -26,6 +26,12 @@ const mutations = {
 const actions = {
   async createPurchases({ commit }, payload) {
     return await axios.post('/api/v1/purchases', payload);
+  },
+  async fetchAllPurchases({ commit }, params) {
+    return await axios.get('/api/v1/purchases', { params });
+  },
+  async fetchPurchase({ commit }, payload) {
+    return await axios.get(`/api/v1/purchases/${payload}` );
   }
 };
 

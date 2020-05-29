@@ -50,10 +50,10 @@ exports.getPurchase = catchError(async (req, res, next) => {
 exports.createPurchase = catchError(async (req, res, next) => {
   let purchase = await PurchaseModel.create(req.body);
 
-  /*order = await PurchaseModel.findById(order._id).populate({
-    path: 'orderDetail',
+  purchase = await PurchaseModel.findById(purchase._id).populate({
+    path: 'purchaseDetail',
     select: '-__v'
-  });*/
+  });
 
   res.status(201).json({
     status: 'success',

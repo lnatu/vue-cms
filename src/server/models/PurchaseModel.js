@@ -49,14 +49,14 @@ purchaseSchema.pre(/^find/, function(next) {
   next();
 });
 
-// purchaseSchema.virtual('totalPrice').get(function() {
-//   let total = 0;
-//   this.purchaseDetail.forEach(purchase => {
-//     total += purchase.product.price * purchase.quantity;
-//   });
-//
-//   return total;
-// });
+purchaseSchema.virtual('totalPrice').get(function() {
+  let total = 0;
+  this.purchaseDetail.forEach(purchase => {
+    total += purchase.product.price * purchase.quantity;
+  });
+
+  return total;
+});
 
 const PurchaseModel = mongoose.model('Purchase', purchaseSchema);
 
