@@ -51,8 +51,8 @@
               <h3 class="text-danger mt-3">Ordered item</h3>
               <ul class="list-group mb-3">
                 <li
-                  v-for="item in order.orderDetail"
-                  :key="item._key"
+                  v-for="item in orderDetailArr"
+                  :key="item._id"
                   class="list-group-item"
                 >
                   <span class="text-bold" style="font-size: 22px;">
@@ -65,6 +65,7 @@
                     $ {{ item.product.price }}
                   </span>
                   <span
+                    @click="removeOrderDetailItem(item._id)"
                     class="badge badge-danger float-right"
                     style="font-size: 18px; cursor: pointer;"
                   >
@@ -130,6 +131,9 @@
                     </td>
                     <td>
                       <button
+                        @click="
+                          addOrderDetailItem({ item: product, quantity: 1 })
+                        "
                         type="button"
                         :disabled="0 >= product.quantity"
                         class="btn btn-success"
@@ -140,6 +144,15 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="cta mt-3 float-right">
+                <button
+                  @click="updateOrderAction"
+                  type="button"
+                  class="btn btn-info"
+                >
+                  Update
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -160,12 +173,56 @@ export default {
     return {
       order: null,
       products: null,
-      customers: null
+      customers: null,
+      orderDetailArr: null,
+      orderDetail: {},
+      currentLength: 0
     };
   },
   methods: {
     ...mapMutations(['setShowLoading']),
-    ...mapActions(['fetchAllProducts', 'fetchOrder', 'fetchCustomers']),
+    ...mapActions([
+      'fetchAllProducts',
+      'fetchOrder',
+      'fetchCustomers',
+      'updateOrder',
+      'createOrderDetail',
+      'updateOrderDetail'
+    ]),
+    removeOrderDetailItem(id) {
+      this.orderDetailArr.forEach((item, index, array) => {
+        if (item._id === id) {
+          array.splice(index, 1);
+        }
+      });
+
+      this.order.orderDetail.forEach((item, index, array) => {
+        if (item._id === id) {
+          array.splice(index, 1);
+        }
+      });
+
+      this.currentLength--;
+    },
+    addOrderDetailItem({ item, quantity }) {
+      const filter = this.orderDetailArr.filter(
+        order => order.product._id === item._id
+      );
+      if (filter.length > 0) {
+        this.orderDetailArr.forEach(order => {
+          if (order.product._id === item._id) {
+            order.quantity += 1;
+          }
+        });
+      } else {
+        this.orderDetailArr.push({
+          id: item._id,
+          product: item,
+          quantity,
+          addNew: true
+        });
+      }
+    },
     async showAllData() {
       this.setShowLoading(true);
       try {
@@ -180,6 +237,7 @@ export default {
         this.order = responseArr[0].data.data.order;
         this.products = responseArr[1].data.data.products;
         this.customers = responseArr[2].data.data.customers;
+        this.orderDetailArr = [...this.order.orderDetail];
         this.order.shipDate = new Date(
           new Date(this.order.shipDate).getTime() -
             new Date(this.order.shipDate).getTimezoneOffset() * 60000
@@ -187,6 +245,56 @@ export default {
           .toISOString()
           .split('T')[0];
         this.setShowLoading(false);
+      } catch (err) {
+        this.setShowLoading(false);
+        this.$toasted.show(err.response.data.message, {
+          theme: 'bubble',
+          position: 'bottom-right',
+          duration: 5000
+        });
+      }
+    },
+    async updateOrderAction() {
+      this.setShowLoading(true);
+      try {
+        let newOrderDetail = [];
+        const updateOrderDetailPromise = this.orderDetailArr.map(async item => {
+          if (item.addNew) {
+            newOrderDetail.push({
+              product: item.product._id,
+              quantity: item.quantity
+            });
+          } else {
+            return await this.updateOrderDetail({
+              id: item._id,
+              orderDetail: {
+                product: item.product._id,
+                quantity: item.quantity
+              }
+            });
+          }
+        });
+
+        const newOrderDetailPromises = newOrderDetail.map(
+          async item => await this.createOrderDetail(item)
+        );
+        const newOrderDetailResponses = await Promise.all(
+          newOrderDetailPromises
+        );
+
+        newOrderDetailResponses.forEach(item => {
+          this.order.orderDetail.push(item.data.data.orderDetail._id);
+        });
+
+        const response = await this.updateOrder({
+          id: this.order._id,
+          order: this.order
+        });
+
+        this.$router.push({
+          name: 'orderDetail',
+          params: { id: response.data.data.order._id }
+        });
       } catch (err) {
         this.setShowLoading(false);
         this.$toasted.show(err.response.data.message, {

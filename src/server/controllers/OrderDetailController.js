@@ -25,7 +25,9 @@ exports.getOrderDetail = catchError(async (req, res, next) => {
   const orderDetail = await OrderDetailModel.findById(req.params.id);
 
   if (!orderDetail) {
-    return next(new AppError(`No order detail found with id: ${req.params.id}`, 404));
+    return next(
+      new AppError(`No order detail found with id: ${req.params.id}`, 404)
+    );
   }
 
   res.status(200).json({
@@ -48,10 +50,14 @@ exports.createOrderDetail = catchError(async (req, res, next) => {
 });
 
 exports.updateOrderDetail = catchError(async (req, res, next) => {
-  const orderDetail = await OrderDetailModel.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+  const orderDetail = await OrderDetailModel.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    {
+      new: true,
+      runValidators: true
+    }
+  );
 
   if (!orderDetail) {
     return next(
@@ -68,9 +74,7 @@ exports.updateOrderDetail = catchError(async (req, res, next) => {
 });
 
 exports.deleteOrderDetail = catchError(async (req, res, next) => {
-  const orderDetail = await OrderDetailModel.findByIdAndUpdate(req.params.id, {
-    isActive: false
-  });
+  const orderDetail = await OrderDetailModel.findByIdAndDelete(req.params.id);
 
   if (!orderDetail) {
     return next(

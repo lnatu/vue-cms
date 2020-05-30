@@ -33,6 +33,9 @@ const actions = {
   async createOrder({ commit }, payload) {
     return await axios.post('/api/v1/orders/', payload);
   },
+  async updateOrder({ commit }, {id, order}) {
+    return await axios.patch(`/api/v1/orders/${id}`, order);
+  },
   async deleteOrder({ commit }, payload) {
     return await axios.delete(`/api/v1/orders/${payload}`);
   }

@@ -25,11 +25,13 @@ const mutations = {
 
 const actions = {
   async createOrderDetail({ commit }, payload) {
-    try {
-      return await axios.post('/api/v1/ordersDetail', payload);
-    } catch (err) {
-      console.log(err.response);
-    }
+    return await axios.post('/api/v1/ordersDetail', payload);
+  },
+  async updateOrderDetail({ commit }, { id, orderDetail }) {
+    return await axios.patch(`/api/v1/ordersDetail/${id}`, orderDetail);
+  },
+  async deleteOrderDetail({commit}, payload) {
+    return await axios.delete(`/api/v1/ordersDetail/${payload}`);
   }
 };
 
