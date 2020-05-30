@@ -284,25 +284,20 @@ export default {
     },
     async createOrderDetailAction() {
       this.setShowLoading(true);
-      let orderDetailItem = [];
-      for (let order in this.orderDetail) {
-        const { productId, quantity } = this.orderDetail[order];
-        orderDetailItem.push(
-          this.createOrderDetail({ product: productId, quantity })
-        );
-        this.orderQuantity.push({ product: productId, quantity });
-      }
-
       try {
+        let orderDetailItem = [];
+        for (let order in this.orderDetail) {
+          const { productId, quantity } = this.orderDetail[order];
+          orderDetailItem.push(
+            this.createOrderDetail({ product: productId, quantity })
+          );
+          this.orderQuantity.push({ product: productId, quantity });
+        }
+
         const response = await Promise.all(orderDetailItem);
         response.forEach(item => {
           this.order.orderDetail.push(item.data.data.orderDetail._id);
         });
-      } catch (err) {
-        console.log(err.response);
-      }
-
-      try {
         if (this.order.orderDetail.length === 0) {
           this.setShowLoading(false);
           this.$toasted.show('Please choose some product', {

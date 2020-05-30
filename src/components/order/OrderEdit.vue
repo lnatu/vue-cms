@@ -49,7 +49,12 @@
             </div>
             <div class="col-6">
               <label for="status">Status</label>
-              <select v-model="order.status" name="status" id="status" class="form-control">
+              <select
+                v-model="order.status"
+                name="status"
+                id="status"
+                class="form-control"
+              >
                 <option value="order success"> Order Success</option>
                 <option value="packing">Packing</option>
                 <option value="on delivery">On Delivery</option>
@@ -198,7 +203,8 @@ export default {
       'fetchCustomers',
       'updateOrder',
       'createOrderDetail',
-      'updateOrderDetail'
+      'updateOrderDetail',
+      'updateProductQuantity'
     ]),
     removeOrderDetailItem(id) {
       this.orderDetailArr.forEach((item, index, array) => {
@@ -276,6 +282,10 @@ export default {
               quantity: item.quantity
             });
           } else {
+            this.updateProductQuantity({
+              id: item.product._id,
+              quantity: -item.quantity
+            });
             return await this.updateOrderDetail({
               id: item._id,
               orderDetail: {
@@ -286,9 +296,13 @@ export default {
           }
         });
 
-        const newOrderDetailPromises = newOrderDetail.map(
-          async item => await this.createOrderDetail(item)
-        );
+        const newOrderDetailPromises = newOrderDetail.map(async item => {
+          this.updateProductQuantity({
+            id: item.product,
+            quantity: -item.quantity
+          });
+          return await this.createOrderDetail(item);
+        });
         const newOrderDetailResponses = await Promise.all(
           newOrderDetailPromises
         );

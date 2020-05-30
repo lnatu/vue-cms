@@ -46,6 +46,7 @@ export const routes = [
   {
     path: '/',
     component: Home,
+    meta: { onlyAuthUser: true },
     name: 'home'
   },
   {

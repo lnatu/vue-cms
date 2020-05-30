@@ -2,7 +2,6 @@ const axios = require('axios');
 
 const state = {
   authUser: JSON.parse(localStorage.getItem('user')) || null,
-  // authUser: null,
   isLogin: false
 };
 

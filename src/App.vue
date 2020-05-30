@@ -1,6 +1,9 @@
 <template>
   <div class="main">
-    <div class="wrapper">
+    <div v-if="!getAuthUser" class="login">
+      <router-view />
+    </div>
+    <div v-else class="wrapper">
       <Loading v-if="getShowLoading" />
       <!-- Navbar -->
       <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -8,8 +11,8 @@
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" data-widget="pushmenu" href="#" role="button"
-              ><i class="fas fa-bars"></i
-            ></a>
+              ><i class="fas fa-bars" />
+            </a>
           </li>
           <li class="nav-item d-none d-sm-inline-block">
             <a href="index3.html" class="nav-link">Home</a>
@@ -41,7 +44,9 @@
           <router-link class="mr-3" to="me">
             {{ `${getAuthUser.firstName} ${getAuthUser.lastName}` }}
           </router-link>
-          <button type="button" class="btn btn-danger" @click="logout">Logout</button>
+          <button type="button" class="btn btn-danger" @click="logout">
+            Logout
+          </button>
         </div>
         <div class="ml-auto mr-2" v-else>
           <router-link class="ml-auto mr-2" :to="{ name: 'Login' }">
@@ -117,8 +122,7 @@ export default {
     ...mapActions(['logout']),
     ...mapMutations(['setIsLogin', 'setAuthUser'])
   },
-  created () {
-  }
+  created() {}
 };
 </script>
 
