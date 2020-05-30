@@ -31,11 +31,11 @@
                     />
                   </div>
                   <div class="col-6">
-                    <label for="status">Customer</label>
+                    <label for="customer">Customer</label>
                     <select
                       v-model="order.customer"
-                      name="status"
-                      id="status"
+                      name="customer"
+                      id="customer"
                       class="form-control"
                     >
                       <option

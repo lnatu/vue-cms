@@ -47,6 +47,17 @@
                 type="date"
               />
             </div>
+            <div class="col-6">
+              <label for="status">Status</label>
+              <select v-model="order.status" name="status" id="status" class="form-control">
+                <option value="order success"> Order Success</option>
+                <option value="packing">Packing</option>
+                <option value="on delivery">On Delivery</option>
+                <option value="delivery successful">
+                  Delivery Successful
+                </option>
+              </select>
+            </div>
             <div class="col-12">
               <h3 class="text-danger mt-3">Ordered item</h3>
               <ul class="list-group mb-3">

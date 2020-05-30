@@ -13,19 +13,19 @@
             </p>
             <p>
               <span><strong>Created by:</strong></span>
-              {{
-                `${order.createdBy.firstName} ${order.createdBy.lastName}`
-              }}
+              {{ `${order.createdBy.firstName} ${order.createdBy.lastName}` }}
             </p>
             <p>
               <span><strong>Ship date:</strong></span>
               {{ new Date(order.shipDate).toLocaleDateString() }}
             </p>
             <p>
+              <span><strong>Status:</strong></span>
+              <span :class="showStatus(order.status)" class="ml-1 text-capitalize">{{ order.status }}</span>
+            </p>
+            <p>
               <span><strong>Customer:</strong></span>
-              {{
-                `${order.customer.firstName} ${order.customer.lastName}`
-              }}
+              {{ `${order.customer.firstName} ${order.customer.lastName}` }}
             </p>
             <p>
               <span><strong>Total:</strong></span>
@@ -34,35 +34,38 @@
             <p><strong>Items</strong></p>
             <table class="table table-bordered table-hover mb-0">
               <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">SKU</th>
-                <th scope="col">Name</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Price</th>
-                <th scope="col">Category</th>
-                <th scope="col">Supplier</th>
-              </tr>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">SKU</th>
+                  <th scope="col">Name</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Category</th>
+                  <th scope="col">Supplier</th>
+                </tr>
               </thead>
               <tbody>
-              <tr v-for="(orderDetail, index) in order.orderDetail" :key="orderDetail._id">
-                <th scope="row">{{ index + 1 }}</th>
-                <td>{{ orderDetail.product.sku }}</td>
-                <td>{{ orderDetail.product.name }}</td>
-                <td>{{ orderDetail.quantity }}</td>
-                <td>{{ orderDetail.product.price }}</td>
-                <td>{{ orderDetail.product.category.name }}</td>
-                <td>
-                  <router-link
-                          :to="{
-                    name: 'supplierDetail',
-                    params: { id: orderDetail.product.supplier._id }
-                  }"
-                  >
-                    {{ orderDetail.product.supplier.name }}
-                  </router-link>
-                </td>
-              </tr>
+                <tr
+                  v-for="(orderDetail, index) in order.orderDetail"
+                  :key="orderDetail._id"
+                >
+                  <th scope="row">{{ index + 1 }}</th>
+                  <td>{{ orderDetail.product.sku }}</td>
+                  <td>{{ orderDetail.product.name }}</td>
+                  <td>{{ orderDetail.quantity }}</td>
+                  <td>{{ orderDetail.product.price }}</td>
+                  <td>{{ orderDetail.product.category.name }}</td>
+                  <td>
+                    <router-link
+                      :to="{
+                        name: 'supplierDetail',
+                        params: { id: orderDetail.product.supplier._id }
+                      }"
+                    >
+                      {{ orderDetail.product.supplier.name }}
+                    </router-link>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
@@ -82,12 +85,33 @@ export default {
   name: 'OrderDetail',
   data() {
     return {
-      order: null
-    }
+      order: null,
+      status: ['order success', 'packing', 'on delivery', 'delivery successful']
+    };
   },
   methods: {
     ...mapMutations(['setShowLoading']),
     ...mapActions(['fetchOrder']),
+    showStatus(status) {
+      let statusCode = '';
+      switch (status) {
+        case 'order success':
+          statusCode = 'badge badge-primary';
+          break;
+        case 'packing':
+          statusCode = 'badge badge-warning';
+          break;
+        case 'on delivery':
+          statusCode = 'badge badge-info';
+          break;
+        case 'delivery successful':
+          statusCode = 'badge badge-success';
+          break;
+        default:
+          statusCode = 'badge badge-primary';
+      }
+      return statusCode;
+    },
     async showOrder() {
       this.setShowLoading(true);
       try {
