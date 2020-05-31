@@ -10,7 +10,8 @@ const purchaseSchema = new mongoose.Schema(
     purchaseDetail: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: 'PurchaseDetail'
+        ref: 'PurchaseDetail',
+        required: [true, 'Please specify purchase creator']
       }
     ],
     isActive: {
@@ -38,6 +39,8 @@ const purchaseSchema = new mongoose.Schema(
   }
 );
 
+purchaseSchema.index({ '$**': 'text' });
+
 purchaseSchema.pre(/^find/, function(next) {
   this.populate({
     path: 'purchaseDetail',
@@ -56,6 +59,11 @@ purchaseSchema.virtual('totalPrice').get(function() {
   });
 
   return total;
+});
+
+purchaseSchema.pre(/^find.*(?<!Update)$/, function(next) {
+  this.find({ isActive: { $ne: false } });
+  next();
 });
 
 const PurchaseModel = mongoose.model('Purchase', purchaseSchema);

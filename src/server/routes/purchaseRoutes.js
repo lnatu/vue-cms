@@ -4,17 +4,17 @@ const PurchaseController = require('./../controllers/PurchaseController');
 
 const router = express.Router();
 
-// router.use(AuthController.protect);
+router.use(AuthController.protect);
 
 router
   .route('/')
   .get(PurchaseController.getAllPurchases)
-  .post(PurchaseController.createPurchase);
+  .post(AuthController.restrictTo('admin'), PurchaseController.createPurchase);
 
 router
   .route('/:id')
   .get(PurchaseController.getPurchase)
-  .patch(PurchaseController.updatePurchase)
-  .delete(PurchaseController.deletePurchase);
+  .patch(AuthController.restrictTo('admin'), PurchaseController.updatePurchase)
+  .delete(AuthController.restrictTo('admin'), PurchaseController.deletePurchase);
 
 module.exports = router;

@@ -26,6 +26,9 @@ const mutations = {
 const actions = {
   async createPurchasesDetail({ commit }, payload) {
     return await axios.post('/api/v1/purchasesDetail', payload);
+  },
+  async updatePurchasesDetail({ commit }, { id, purchaseDetail }) {
+    return await axios.patch(`/api/v1/purchasesDetail/${id}`, purchaseDetail);
   }
 };
 

@@ -223,7 +223,7 @@ export default {
           return;
         }
 
-        await this.createPurchases({
+        const res = await this.createPurchases({
           createdBy: this.user._id,
           purchaseDetail: createdPurchaseDetail
         });
@@ -235,7 +235,10 @@ export default {
           });
         }
 
-        this.setShowLoading(false);
+        this.$router.push({
+          name: 'purchaseDetail',
+          params: { id: res.data.data.purchase._id }
+        });
       } catch (err) {
         console.log(err);
         console.log(err.response);

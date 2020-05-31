@@ -36,6 +36,7 @@ import PurchaseStart from '@/components/purchase/PurchaseStart';
 import PurchaseList from '@/components/purchase/PurchaseList';
 import PurchaseCreate from '@/components/purchase/PurchaseCreate';
 import PurchaseDetail from '@/components/purchase/PurchaseDetail';
+import PurchaseEdit from '@/components/purchase/PurchaseEdit';
 // Import group
 import GroupStart from '@/components/group/GroupStart';
 import GroupList from '@/components/group/GroupList';
@@ -193,6 +194,11 @@ export const routes = [
         path: 'create',
         component: PurchaseCreate,
         name: 'purchaseCreate'
+      },
+      {
+        path: 'edit/:id',
+        component: PurchaseEdit,
+        name: 'purchaseEdit'
       },
       {
         path: ':id',
