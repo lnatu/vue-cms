@@ -58,6 +58,7 @@ export default {
         localStorage.setItem('user', JSON.stringify(user));
         this.setAuthUser(user);
         this.$router.push({ name: 'home' });
+        this.$router.go();
         this.setShowLoading(false);
       } catch (err) {
         console.log(err.response);

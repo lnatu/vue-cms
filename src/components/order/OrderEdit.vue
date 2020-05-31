@@ -210,6 +210,10 @@ export default {
       this.orderDetailArr.forEach((item, index, array) => {
         if (item._id === id) {
           array.splice(index, 1);
+          this.updateProductQuantity({
+            id: item.product._id,
+            quantity: item.quantity
+          });
         }
       });
 
@@ -218,8 +222,6 @@ export default {
           array.splice(index, 1);
         }
       });
-
-      this.currentLength--;
     },
     addOrderDetailItem({ item, quantity }) {
       const filter = this.orderDetailArr.filter(
@@ -229,6 +231,11 @@ export default {
         this.orderDetailArr.forEach(order => {
           if (order.product._id === item._id) {
             order.quantity += 1;
+            if (!order.addedQty) {
+              order.addedQty = 0
+            }
+
+            order.addedQty += 1
           }
         });
       } else {
@@ -236,7 +243,8 @@ export default {
           id: item._id,
           product: item,
           quantity,
-          addNew: true
+          addNew: true,
+          addedQty: 1
         });
       }
     },
@@ -282,17 +290,20 @@ export default {
               quantity: item.quantity
             });
           } else {
-            this.updateProductQuantity({
-              id: item.product._id,
-              quantity: -item.quantity
-            });
-            return await this.updateOrderDetail({
+            const res = await this.updateOrderDetail({
               id: item._id,
               orderDetail: {
                 product: item.product._id,
                 quantity: item.quantity
               }
             });
+
+            this.updateProductQuantity({
+              id: item.product._id,
+              quantity: -item.addedQty
+            });
+
+            return res;
           }
         });
 

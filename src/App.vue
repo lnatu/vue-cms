@@ -1,10 +1,10 @@
 <template>
   <div class="main">
+    <Loading v-if="getShowLoading" />
     <div v-if="!getAuthUser" class="login">
       <router-view />
     </div>
     <div v-else class="wrapper">
-      <Loading v-if="getShowLoading" />
       <!-- Navbar -->
       <nav class="main-header navbar navbar-expand navbar-white navbar-light">
         <!-- Left navbar links -->
