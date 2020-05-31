@@ -58,7 +58,6 @@ orderSchema.index({ '$**': 'text' });
 orderSchema.virtual('totalPrice').get(function() {
   let total = 0;
   this.orderDetail.forEach(order => {
-    console.log(order);
     total += order.product.price * order.quantity;
   });
 

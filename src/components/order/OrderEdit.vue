@@ -207,10 +207,10 @@ export default {
       'updateProductQuantity'
     ]),
     removeOrderDetailItem(id) {
-      this.orderDetailArr.forEach((item, index, array) => {
+      this.orderDetailArr.forEach(async (item, index, array) => {
         if (item._id === id) {
           array.splice(index, 1);
-          this.updateProductQuantity({
+          await this.updateProductQuantity({
             id: item.product._id,
             quantity: item.quantity
           });
@@ -232,10 +232,10 @@ export default {
           if (order.product._id === item._id) {
             order.quantity += 1;
             if (!order.addedQty) {
-              order.addedQty = 0
+              order.addedQty = 0;
             }
 
-            order.addedQty += 1
+            order.addedQty += 1;
           }
         });
       } else {
@@ -298,21 +298,25 @@ export default {
               }
             });
 
-            this.updateProductQuantity({
-              id: item.product._id,
-              quantity: -item.addedQty
-            });
+           if (item.addedQty) {
+             await this.updateProductQuantity({
+               id: item.product._id,
+               quantity: -item.addedQty
+             });
+           }
 
             return res;
           }
         });
 
         const newOrderDetailPromises = newOrderDetail.map(async item => {
-          this.updateProductQuantity({
-            id: item.product,
-            quantity: -item.quantity
-          });
-          return await this.createOrderDetail(item);
+          if (item.quantity) {
+            await this.updateProductQuantity({
+              id: item.product,
+              quantity: -item.quantity
+            });
+            return await this.createOrderDetail(item);
+          }
         });
         const newOrderDetailResponses = await Promise.all(
           newOrderDetailPromises
@@ -332,6 +336,8 @@ export default {
           params: { id: response.data.data.order._id }
         });
       } catch (err) {
+        console.log(err);
+        console.log(err.response);
         this.setShowLoading(false);
         this.$toasted.show(err.response.data.message, {
           theme: 'bubble',

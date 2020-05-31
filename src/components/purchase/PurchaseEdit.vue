@@ -212,8 +212,6 @@ export default {
           })
         );
 
-        console.log(purchaseDetailArr2);
-
         const promises2 = purchaseDetailArr2.map(async item => {
           if (item._id) {
             return await this.updatePurchasesDetail(item);
